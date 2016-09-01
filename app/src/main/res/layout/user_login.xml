@@ -9,37 +9,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.reubert.appcadeirantes.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nome de usuário"
-        android:id="@+id/txtNomeUsuario"
-        android:textSize="20dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="46dp" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/edtNomeUsuario"
-        android:layout_below="@+id/txtNomeUsuario"
-        android:layout_marginTop="5dp"
+        android:hint="Nome de usuário"
+        android:layout_marginTop="110dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Senha"
-        android:id="@+id/txtSenha"
-        android:textSize="20dp"
-        android:layout_below="@+id/edtNomeUsuario"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -47,8 +27,8 @@
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/edtSenha"
-        android:layout_below="@+id/txtSenha"
-        android:layout_marginTop="5dp"
+        android:hint="Senha"
+        android:layout_marginTop="150dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/edtNomeUsuario"

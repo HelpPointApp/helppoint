@@ -1,5 +1,6 @@
 package com.example.reubert.appcadeirantes;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,30 +26,50 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_login);
 
-        loadIds();
+        carregaIds();
 
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                nome_usuario = campo_nome.getText().toString();
-                senha = campo_senha.getText().toString();
-                setNomeSenhaTeste(nome_usuario, senha);
+                switch (view.getId()){
+                    case R.id.btnEntrar:
+                        colocaNomeESenha();
+                        break;
+                    case R.id.btnCadastrar:
+                        carregaTelaCadastro();
+                        break;
+                    default:
+                        break;
+                }
             }
         };
+
         entrar.setOnClickListener(clickListener);
+        cadastrar.setOnClickListener(clickListener);
     }
 
-    public void setNomeSenhaTeste(String nomeUsuario,String senhaUsuario){
+    public void colocaNomeSenhaTeste(String nomeUsuario,String senhaUsuario){
         nome_teste.setText(nomeUsuario);
         senha_teste.setText(senhaUsuario);
     }
 
-    public void loadIds(){
-        this.nome_teste = (TextView) findViewById(R.id.txtNomeTeste);
+    public void colocaNomeESenha(){
+        nome_usuario = campo_nome.getText().toString();
+        senha        = campo_senha.getText().toString();
+        colocaNomeSenhaTeste(nome_usuario, senha);
+    }
+
+    public void carregaTelaCadastro(){
+        Intent telaCadastro = new Intent(MainActivity.this, user_register.class);
+        startActivity(telaCadastro);
+    }
+
+    public void carregaIds(){
+        this.nome_teste  = (TextView) findViewById(R.id.txtNomeTeste);
         this.senha_teste = (TextView) findViewById(R.id.txtSenhaTeste);
-        entrar = (Button) findViewById(R.id.btnEntrar);
-        cadastrar = (Button) findViewById(R.id.btnCadastrar);
-        this.campo_nome = (EditText) findViewById(R.id.edtNomeUsuario);
+        this.entrar      = (Button) findViewById(R.id.btnEntrar);
+        this.cadastrar   = (Button) findViewById(R.id.btnCadastrar);
+        this.campo_nome  = (EditText) findViewById(R.id.edtNomeUsuario);
         this.campo_senha = (EditText) findViewById(R.id.edtSenha);
     }
 }
