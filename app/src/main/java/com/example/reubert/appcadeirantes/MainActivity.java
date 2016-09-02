@@ -9,34 +9,34 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    public String nome_usuario;
-    public String senha;
+    public String userName;
+    public String userPassword;
 
-    public Button cadastrar;
-    public Button entrar;
+    public Button signUp;
+    public Button signIn;
 
-    public TextView nome_teste;
-    public TextView senha_teste;
+    public TextView testName;
+    public TextView testPassword;
 
-    public EditText campo_nome;
-    public EditText campo_senha;
+    public EditText nameField;
+    public EditText passwordField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_login);
+        setContentView(R.layout.userlogin);
 
-        carregaIds();
+        loadIds();
 
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch (view.getId()){
-                    case R.id.btnEntrar:
-                        colocaNomeESenha();
+                    case R.id.btnSignIn:
+                        setNamePassword();
                         break;
-                    case R.id.btnCadastrar:
-                        carregaTelaCadastro();
+                    case R.id.btnSignUp:
+                        loadUserRegisterScreen();
                         break;
                     default:
                         break;
@@ -44,32 +44,44 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        entrar.setOnClickListener(clickListener);
-        cadastrar.setOnClickListener(clickListener);
+        signIn.setOnClickListener(clickListener);
+        signUp.setOnClickListener(clickListener);
     }
 
-    public void colocaNomeSenhaTeste(String nomeUsuario,String senhaUsuario){
-        nome_teste.setText(nomeUsuario);
-        senha_teste.setText(senhaUsuario);
+    /**
+     * This function below is to just make an easy test.
+     */
+    public void setNamePasswordTest(String userName,String userPassword){
+        testName.setText(userName);
+        testPassword.setText(userPassword);
     }
 
-    public void colocaNomeESenha(){
-        nome_usuario = campo_nome.getText().toString();
-        senha        = campo_senha.getText().toString();
-        colocaNomeSenhaTeste(nome_usuario, senha);
+    /**
+     * This function below is to set the userName and userPassword
+     */
+    public void setNamePassword(){
+        userName     = nameField.getText().toString();
+        userPassword = passwordField.getText().toString();
+        setNamePasswordTest(userName, userPassword);
     }
 
-    public void carregaTelaCadastro(){
-        Intent telaCadastro = new Intent(MainActivity.this, user_register.class);
-        startActivity(telaCadastro);
+    /**
+     * This function below, allow us to load new screen (Register screen).
+     */
+    public void loadUserRegisterScreen(){
+        Intent screenRegister = new Intent(MainActivity.this, UserRegister.class);
+        startActivity(screenRegister);
     }
 
-    public void carregaIds(){
-        this.nome_teste  = (TextView) findViewById(R.id.txtNomeTeste);
-        this.senha_teste = (TextView) findViewById(R.id.txtSenhaTeste);
-        this.entrar      = (Button) findViewById(R.id.btnEntrar);
-        this.cadastrar   = (Button) findViewById(R.id.btnCadastrar);
-        this.campo_nome  = (EditText) findViewById(R.id.edtNomeUsuario);
-        this.campo_senha = (EditText) findViewById(R.id.edtSenha);
+    /**
+     * This function below was made to get IDs
+     */
+    public void loadIds(){
+        this.testName      = (TextView) findViewById(R.id.txtUserNameTest);
+        this.testPassword  = (TextView) findViewById(R.id.txtUserPasswordTest);
+        this.signIn        = (Button) findViewById(R.id.btnSignIn);
+        this.signUp        = (Button) findViewById(R.id.btnSignUp);
+        this.nameField     = (EditText) findViewById(R.id.edtUserName);
+        this.passwordField = (EditText) findViewById(R.id.edtPassword);
     }
 }

@@ -12,7 +12,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/edtNomeUsuario"
+        android:id="@+id/edtUserName"
         android:hint="Nome de usuário"
         android:layout_marginTop="110dp"
         android:layout_alignParentLeft="true"
@@ -26,19 +26,19 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:id="@+id/edtSenha"
+        android:id="@+id/edtPassword"
         android:hint="Senha"
         android:layout_marginTop="150dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/edtNomeUsuario"
-        android:layout_alignEnd="@+id/edtNomeUsuario" />
+        android:layout_alignRight="@+id/edtUserName"
+        android:layout_alignEnd="@+id/edtUserName" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Entrar"
-        android:id="@+id/btnEntrar"
+        android:id="@+id/btnSignIn"
         android:background="@color/colorEntrar"
         android:shadowColor="@color/colorEntrar"
         android:layout_centerVertical="true"
@@ -49,11 +49,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Cadastrar"
-        android:id="@+id/btnCadastrar"
+        android:id="@+id/btnSignUp"
         android:layout_marginTop="10dp"
         android:background="@color/colorCadastrar"
         android:shadowColor="@color/colorCadastrar"
-        android:layout_below="@+id/btnEntrar"
+        android:layout_below="@+id/btnSignIn"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -62,10 +62,10 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Nome de usuario"
-        android:id="@+id/txtNomeTeste"
+        android:id="@+id/txtUserNameTest"
         android:textSize="15dp"
         android:layout_marginTop="47dp"
-        android:layout_below="@+id/btnCadastrar"
+        android:layout_below="@+id/btnSignUp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -77,19 +77,19 @@
         android:id="@+id/textView"
         android:layout_marginTop="10dp"
         android:textSize="20dp"
-        android:layout_below="@+id/btnCadastrar"
-        android:layout_alignRight="@+id/txtNomeTeste"
-        android:layout_alignEnd="@+id/txtNomeTeste" />
+        android:layout_below="@+id/btnSignUp"
+        android:layout_alignRight="@+id/txtUserNameTest"
+        android:layout_alignEnd="@+id/txtUserNameTest" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Senha"
-        android:id="@+id/txtSenhaTeste"
+        android:id="@+id/txtUserPasswordTest"
         android:textSize="15dp"
         android:layout_marginTop="5dp"
-        android:layout_below="@+id/txtNomeTeste"
+        android:layout_below="@+id/txtUserNameTest"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

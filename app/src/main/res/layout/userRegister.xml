@@ -7,12 +7,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.reubert.appcadeirantes.user_register">
+    tools:context=".UserRegister">
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/edtNomeUsuarioC"
+        android:id="@+id/edtUserNameC"
         android:layout_marginTop="5dp"
         android:hint="Nome de usuário"
         android:layout_alignParentTop="true"
@@ -24,7 +24,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edtEmailC"
+        android:id="@+id/edtUserEmailC"
         android:hint="Email"
         android:layout_marginTop="45dp"
         android:layout_alignParentLeft="true"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:id="@+id/txtSenhaC"
+        android:id="@+id/txtUserPasswordC"
         android:hint="Senha"
         android:layout_marginTop="85dp"
         android:layout_alignParentTop="true"
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:id="@+id/txtSenhaComparacaoC"
+        android:id="@+id/txtUserTestPasswordC"
         android:hint="Repita senha"
         android:layout_marginTop="125dp"
         android:layout_alignParentLeft="true"
@@ -56,7 +56,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edtCpfC"
+        android:id="@+id/edtUserCpfC"
         android:hint="CPF"
         android:layout_marginTop="165dp"
         android:layout_alignParentLeft="true"
@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:inputType="date"
         android:ems="10"
-        android:id="@+id/edtNascimentoC"
+        android:id="@+id/edtUserBirthC"
         android:hint="Nascimento"
         android:layout_marginTop="205dp"
         android:layout_alignParentLeft="true"
@@ -77,22 +77,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="REGISTRAR"
-        android:id="@+id/btnRegistrar"
+        android:id="@+id/btnRegisterC"
         android:layout_marginTop="10dp"
         android:background="@color/colorEntrar"
         android:shadowColor="@color/colorEntrar"
-        android:layout_below="@+id/edtNascimentoC"
+        android:layout_below="@+id/edtUserBirthC"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="CANCELAR"
-        android:id="@+id/btnCancelar"
+        android:id="@+id/btnCancelC"
         android:layout_marginTop="5dp"
         android:background="@color/colorCadastrar"
         android:shadowColor="@color/colorCadastrar"
-        android:layout_below="@+id/btnRegistrar"
+        android:layout_below="@+id/btnRegisterC"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
