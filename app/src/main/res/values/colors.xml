@@ -3,6 +3,5 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorEntrar">#3e59f1</color>
-    <color name="colorCadastrar">#37a326</color>
+    <color name="lightText">#FFF</color>
 </resources>

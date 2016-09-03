@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">AppCadeirantes</string>
+
+    <!-- General texts -->
+    <string name="password">Senha</string>
+    <string name="username">Usuário</string>
+    <string name="email">E-mail</string>
+    <string name="repeatPassword">Repita a senha</string>
+    <string name="cpf">CPF</string>
+    <string name="dateBirthday">Data de nascimento</string>
+    <string name="signup">Registrar</string>
+    <string name="cancel">Cancelar</string>
 </resources>

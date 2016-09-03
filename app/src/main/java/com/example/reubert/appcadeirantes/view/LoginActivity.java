@@ -1,4 +1,4 @@
-package com.example.reubert.appcadeirantes;
+package com.example.reubert.appcadeirantes.view;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.reubert.appcadeirantes.R;
+
+public class LoginActivity extends AppCompatActivity {
+
     public String userName;
     public String userPassword;
 
@@ -24,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.userlogin);
+        setContentView(R.layout.login);
 
         loadIds();
 
@@ -69,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
      * This function below, allow us to load new screen (Register screen).
      */
     public void loadUserRegisterScreen(){
-        Intent screenRegister = new Intent(MainActivity.this, UserRegister.class);
+        Intent screenRegister = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(screenRegister);
     }
 

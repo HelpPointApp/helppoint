@@ -1,4 +1,4 @@
-package com.example.reubert.appcadeirantes;
+package com.example.reubert.appcadeirantes.view;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class UserRegister extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     public EditText userName;
     public EditText email;
