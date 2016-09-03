@@ -12,30 +12,28 @@
     <!-- Username -->
     <EditText
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/edt_small_height"
+        android:layout_height="wrap_content"
         android:id="@+id/edtUserName"
         android:hint="@string/username"
-        android:textSize="@dimen/edt_small_font"
         android:layout_marginTop="110dp"
-        android:layout_alignLeft="@id/btnSignUp"
-        android:layout_alignStart="@id/btnSignUp"
-        android:layout_alignRight="@id/btnSignUp"
-        android:layout_alignEnd="@id/btnSignUp"
+        android:layout_alignLeft="@+id/btnSignUp"
+        android:layout_alignStart="@+id/btnSignUp"
+        android:layout_alignRight="@+id/btnSignUp"
+        android:layout_alignEnd="@+id/btnSignUp"
         android:layout_marginBottom="15dp"/>
 
     <!-- Password -->
     <EditText
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/edt_small_height"
+        android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:textSize="@dimen/edt_small_font"
         android:id="@+id/edtPassword"
         android:hint="@string/password"
         android:layout_below="@id/edtUserName"
-        android:layout_alignLeft="@id/btnSignUp"
-        android:layout_alignStart="@id/btnSignUp"
-        android:layout_alignRight="@id/btnSignUp"
-        android:layout_alignEnd="@id/btnSignUp" />
+        android:layout_alignLeft="@+id/btnSignUp"
+        android:layout_alignStart="@+id/btnSignUp"
+        android:layout_alignRight="@+id/btnSignUp"
+        android:layout_alignEnd="@+id/btnSignUp" />
 
     <!-- Signin -->
     <Button
@@ -47,8 +45,8 @@
         android:layout_alignLeft="@+id/btnSignUp"
         android:layout_alignStart="@+id/btnSignUp"
         android:layout_alignEnd="@+id/btnSignUp"
-        android:layout_alignRight="@id/btnSignUp"
-        android:layout_above="@id/btnSignUp"
+        android:layout_alignRight="@+id/btnSignUp"
+        android:layout_above="@+id/btnSignUp"
         android:textColor="@color/lightText"/>
 
     <!-- Signup -->

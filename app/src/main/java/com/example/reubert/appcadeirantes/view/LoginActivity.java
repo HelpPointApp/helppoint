@@ -6,85 +6,55 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.reubert.appcadeirantes.R;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public String userName;
-    public String userPassword;
-
-    public Button signUp;
-    public Button signIn;
-
-    public TextView testName;
-    public TextView testPassword;
-
-    public EditText nameField;
-    public EditText passwordField;
+    public EditText edtUserName;
+    public EditText edtPassword;
+    public Button btnSignIn;
+    public Button btnSignUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        loadIds();
-
-        View.OnClickListener clickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (view.getId()){
-                    case R.id.btnSignIn:
-                        setNamePassword();
-                        break;
-                    case R.id.btnSignUp:
-                        loadUserRegisterScreen();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
-
-        signIn.setOnClickListener(clickListener);
-        signUp.setOnClickListener(clickListener);
+        loadAllViewElements();
+        createClickListeners();
     }
 
-    /**
-     * This function below is to just make an easy test.
-     */
-    public void setNamePasswordTest(String userName,String userPassword){
-        testName.setText(userName);
-        testPassword.setText(userPassword);
+
+    public void loadAllViewElements(){
+        this.btnSignIn = (Button) findViewById(R.id.btnSignIn);
+        this.btnSignUp = (Button) findViewById(R.id.btnSignUp);
+        this.edtUserName = (EditText) findViewById(R.id.edtUserName);
+        this.edtPassword = (EditText) findViewById(R.id.edtPassword);
     }
 
-    /**
-     * This function below is to set the userName and userPassword
-     */
-    public void setNamePassword(){
-        userName     = nameField.getText().toString();
-        userPassword = passwordField.getText().toString();
-        setNamePasswordTest(userName, userPassword);
+
+    public void createClickListeners(){
+        btnSignIn.setOnClickListener(new SignInButtonHandler());
+        btnSignUp.setOnClickListener(new SignUpButtonHandler());
     }
 
-    /**
-     * This function below, allow us to load new screen (Register screen).
-     */
-    public void loadUserRegisterScreen(){
-        Intent screenRegister = new Intent(LoginActivity.this, RegisterActivity.class);
-        startActivity(screenRegister);
+
+    public class SignInButtonHandler implements View.OnClickListener {
+        @Override
+        public void onClick(View clickedView){}
     }
 
-    /**
-     * This function below was made to get IDs
-     */
-    public void loadIds(){
-        this.testName      = (TextView) findViewById(R.id.txtUserNameTest);
-        this.testPassword  = (TextView) findViewById(R.id.txtUserPasswordTest);
-        this.signIn        = (Button) findViewById(R.id.btnSignIn);
-        this.signUp        = (Button) findViewById(R.id.btnSignUp);
-        this.nameField     = (EditText) findViewById(R.id.edtUserName);
-        this.passwordField = (EditText) findViewById(R.id.edtPassword);
+
+    public class SignUpButtonHandler implements View.OnClickListener {
+        @Override
+        public void onClick(View clickedView){
+            loadUserRegisterScreen();
+        }
+
+        private void loadUserRegisterScreen(){
+            Intent screenRegister = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(screenRegister);
+        }
     }
 }

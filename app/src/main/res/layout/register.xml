@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/edtEmail"
         android:inputType="textEmailAddress"
-        android:hint="@string/email" />
+        android:hint="@string/email"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -22,6 +22,7 @@
         android:inputType="textPassword"
         android:id="@+id/edtPassword"
         android:hint="@string/password"
+        android:layout_below="@+id/edtEmail"
         />
 
     <EditText
@@ -29,32 +30,34 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:id="@+id/edtPasswordAgain"
-        android:hint="@string/repeatPassword" />
+        android:hint="@string/repeatPassword"
+        android:layout_below="@+id/edtPassword"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edtCPF"
-        android:hint="@string/cpf" />
+        android:hint="@string/cpf"
+        android:layout_below="@+id/edtPasswordAgain"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="date"
-        android:ems="10"
         android:id="@+id/edtBirthday"
-        android:hint="@string/dateBirthday"/>
+        android:hint="@string/dateBirthday"
+        android:layout_below="@+id/edtCPF"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/signup"
         android:id="@+id/btnSignUp"
-        android:layout_above="@id/btnCancel"
-        android:layout_alignStart="@id/btnCancel"
-        android:layout_alignEnd="@id/btnCancel"
-        android:layout_alignLeft="@id/btnCancel"
-        android:layout_alignRight="@id/btnCancel"/>
+        android:layout_above="@+id/btnCancel"
+        android:layout_alignStart="@+id/btnCancel"
+        android:layout_alignEnd="@+id/btnCancel"
+        android:layout_alignLeft="@+id/btnCancel"
+        android:layout_alignRight="@+id/btnCancel"/>
 
     <Button
         android:layout_width="match_parent"
