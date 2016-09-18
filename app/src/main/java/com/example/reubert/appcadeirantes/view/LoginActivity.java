@@ -19,7 +19,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_login);
 
         loadAllViewElements();
         createClickListeners();
@@ -42,7 +42,10 @@ public class LoginActivity extends AppCompatActivity {
 
     public class SignInButtonHandler implements View.OnClickListener {
         @Override
-        public void onClick(View clickedView){}
+        public void onClick(View clickedView){
+            Intent mapsActivity = new Intent(LoginActivity.this, MapsActivity.class);
+            startActivity(mapsActivity);
+        }
     }
 
 

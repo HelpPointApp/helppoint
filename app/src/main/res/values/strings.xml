@@ -10,4 +10,5 @@
     <string name="dateBirthday">Data de nascimento</string>
     <string name="signup">Registrar</string>
     <string name="cancel">Cancelar</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
