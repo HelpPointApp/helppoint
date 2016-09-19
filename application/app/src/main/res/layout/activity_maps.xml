@@ -1,4 +1,4 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/map"
@@ -6,3 +6,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.reubert.appcadeirantes.view.MapsActivity" />
+    -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/viewRelativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        tools:context="com.example.reubert.appcadeirantes.view.MapsActivity"
+        android:layout_marginBottom="70dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/view">
+
+        <Button
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Pedir ajuda"
+        android:id="@+id/btnRequestHelp"
+        android:background="@color/colorPrimary"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

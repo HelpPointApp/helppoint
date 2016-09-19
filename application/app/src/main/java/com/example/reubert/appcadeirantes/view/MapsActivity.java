@@ -21,6 +21,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap googleMap;
     private GPSManager gpsManager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,20 +31,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
 
-        configureLocation();
-        configureBasicFeatures();
+        configureGPS();
+        configureMap();
     }
 
-    private void configureLocation(){
+
+    private void configureGPS(){
         gpsManager = GPSManager.getInstance(this);
         gpsManager.enableLocation();
     }
 
-    private void configureBasicFeatures(){
+
+    private void configureMap(){
         try {
             googleMap.setMyLocationEnabled(true);
         } catch(SecurityException exception){}
