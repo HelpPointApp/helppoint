@@ -13,10 +13,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 
-/**********************************************************************
- * This class will be refactored following Clean Code's instructions.
- * But probably will not be so clean for be shown as MVP.
- **********************************************************************/
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap googleMap;
@@ -54,8 +50,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void focusOnCurrentUserPosition(){
         Location userLocation = gpsManager.getUserLocation();
-        final double latitude = userLocation.getLatitude();
-        final double longitude = userLocation.getLongitude();
+        double latitude;
+        double longitude;
+
+        if(userLocation != null){
+            latitude = userLocation.getLatitude();
+            longitude = userLocation.getLongitude();
+        } else {
+            latitude = -19.9273724;
+            longitude = -43.9474144;
+        }
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 17));
     }
