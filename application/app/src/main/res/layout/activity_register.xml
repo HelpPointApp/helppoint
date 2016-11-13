@@ -7,7 +7,15 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context=".view.RegisterActivity">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edtUsername"
+        android:inputType="text"
+        android:hint="@string/username"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -33,20 +41,20 @@
         android:hint="@string/repeatPassword"
         android:layout_below="@+id/edtPassword"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/edtCPF"
-        android:hint="@string/cpf"
-        android:layout_below="@+id/edtPasswordAgain"/>
+    <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/edtCPF"-->
+        <!--android:hint="@string/cpf"-->
+        <!--android:layout_below="@+id/edtPasswordAgain"/>-->
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        android:id="@+id/edtBirthday"
-        android:hint="@string/dateBirthday"
-        android:layout_below="@+id/edtCPF"/>
+    <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:inputType="date"-->
+        <!--android:id="@+id/edtBirthday"-->
+        <!--android:hint="@string/dateBirthday"-->
+        <!--android:layout_below="@+id/edtCPF"/>-->
 
     <Button
         android:layout_width="wrap_content"

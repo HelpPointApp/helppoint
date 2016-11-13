@@ -1,28 +1,48 @@
 package com.example.reubert.appcadeirantes.model;
 
-import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseClassName;
-import com.parse.ParseRelation;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import java.util.List;
+
+
+/*  Example
+    Help help = new Help();
+    help.setDescription("asd asd sad as da");
+    help.setTypeHelp(1);
+    help.setUserTarget(this.user);
+    help.setLocation(-19.88619068, -44.01296422);
+    help.save();*/
 
 @ParseClassName("Help")
 public class Help extends ParseObject{
 
-    public User getUserTarget(){
-        return (User) get("userTarget");
+    public ParseUser getUserTarget(){
+        return (ParseUser) get("userTarget");
     }
 
-    public void setUserTarget(User user){
+    public void setUserTarget(ParseUser user){
         put("userTarget", user);
     }
 
-    public User getUserHelp(){
-        return (User) get("userHelp");
+    public ParseUser getUserHelp(){
+        return (ParseUser) get("userHelp");
     }
 
-    public void setUserHelp(User user){
+    public void setUserHelp(ParseUser user){
         put("userHelp", user);
+    }
+
+    public void setDescription(String description){
+        put("description", description);
+    }
+
+    public String getDescription(){
+        return getString("description");
     }
 
     public int getTypeHelp(){
@@ -40,5 +60,12 @@ public class Help extends ParseObject{
 
     public ParseGeoPoint getLocation(){
         return (ParseGeoPoint) get("location");
+    }
+
+    public static List<Help> GetHelpOutOfCloseness(double latitude, double longitude, int zoom) throws ParseException {
+        ParseGeoPoint userLocation = new ParseGeoPoint(latitude, longitude);
+        ParseQuery<Help> query = ParseQuery.getQuery("Help");
+        ParseQuery<Help> helps = query.whereWithinKilometers("location", userLocation, (zoom > 17 ? zoom - 17 : 1) * 2);
+        return helps.find();
     }
 }

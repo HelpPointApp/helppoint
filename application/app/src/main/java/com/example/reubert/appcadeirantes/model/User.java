@@ -14,12 +14,28 @@ public class User extends ParseUser{
         return getString("name");
     }
 
+    public void setBirthday(String date){
+        put("birthday", date);
+    }
+
+    public String getBirthday(){
+        return getString("birthday");
+    }
+
     public void setAge(int age){
         put("age", age);
     }
 
     public int getAge(){
         return getInt("age");
+    }
+
+    public void setPoints(int points){
+        put("points", points);
+    }
+
+    public int getPoints(){
+        return getInt("points");
     }
 
     public void setLastPosition(double latitude, double longitude){
