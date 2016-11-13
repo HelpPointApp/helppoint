@@ -15,12 +15,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/edtUserName"
         android:hint="@string/username"
-        android:layout_marginTop="110dp"
-        android:layout_alignLeft="@+id/btnSignUp"
-        android:layout_alignStart="@+id/btnSignUp"
-        android:layout_alignRight="@+id/btnSignUp"
-        android:layout_alignEnd="@+id/btnSignUp"
-        android:layout_marginBottom="15dp"/>
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <!-- Password -->
     <EditText
