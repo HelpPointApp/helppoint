@@ -13,13 +13,6 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edtUserName"
-        android:inputType="text"
-        android:hint="@string/username"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/edtEmail"
         android:inputType="textEmailAddress"
         android:hint="@string/email"/>

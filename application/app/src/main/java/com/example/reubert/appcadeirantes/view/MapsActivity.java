@@ -1,5 +1,6 @@
 package com.example.reubert.appcadeirantes.view;
 
+import android.content.Context;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.reubert.appcadeirantes.model.Help;
 import com.example.reubert.appcadeirantes.model.User;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
@@ -33,6 +35,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GPSManager gpsManager;
     private ParseUser user;
     private List<Help> helps;
+    private List<Marker> markers;
 
     private double _lat;
     private double _long;
@@ -76,7 +79,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private Help getHelpByLocation(double latitude, double longitude){
+    private Help getHelpByMarkerLocation(double latitude, double longitude){
         for (int i =0, len = helps.size(); i < len; i++){
             Help help = helps.get(i);
             ParseGeoPoint location = help.getLocation();
@@ -90,37 +93,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void addHelpMarkers(){
         double latitude = this._lat;
         double longitude = this._long;
+        int zoom = (int) googleMap.getCameraPosition().zoom;
+        final Context context = this.getApplicationContext();
 
-        try {
-            googleMap.clear();
-            helps = Help.GetHelpOutOfCloseness(latitude, longitude, 17);
-
-            for (int i = 0, len = helps.size(); i < len; i++) {
-                Help help = helps.get(i);
-                ParseGeoPoint point = help.getLocation();
-                MarkerOptions marker = new MarkerOptions();
-                marker.position(new LatLng(point.getLatitude(), point.getLongitude()));
-                googleMap.addMarker(marker);
+        googleMap.clear();
+        Help.GetHelpOutOfCloseness(latitude, longitude, zoom, new FindCallback<Help>() {
+            @Override
+            public void done(List<Help> objects, ParseException e) {
+                helps = objects;
+                for (int i = 0, len = objects.size(); i < len; i++) {
+                    Help help = objects.get(i);
+                    ParseGeoPoint point = help.getLocation();
+                    MarkerOptions marker = new MarkerOptions();
+                    marker.position(new LatLng(point.getLatitude(), point.getLongitude()));
+                    googleMap.addMarker(marker);
+                }
             }
-        }catch(ParseException e){
-            Log.e("addHelpMarkers", e.toString());
-        }
+        });
 
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 LatLng location = marker.getPosition();
-                Help help = getHelpByLocation(location.latitude, location.longitude);
+                Help help = getHelpByMarkerLocation(location.latitude, location.longitude);
                 ParseUser userTarget = help.getUserTarget();
                 try {
                     userTarget.fetchIfNeeded();
-
                     // not working, error: java.lang.IllegalStateException: You need to use a Theme.AppCompat theme (or descendant) with this activity
-                    AlertDialog.Builder alertBuild = new AlertDialog.Builder(getApplicationContext());
+                    AlertDialog.Builder alertBuild = new AlertDialog.Builder(context);
                     alertBuild.setTitle("Ajuda");
                     alertBuild.setMessage("Ajude ao " + userTarget.get("name") + "!");
                     alertBuild.show();
-                }catch (Exception e){
+                }catch (Exception e) {
                     Log.e("markerclick", e.toString());
                 }
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 17));

@@ -1,5 +1,6 @@
 package com.example.reubert.appcadeirantes.model;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
@@ -62,10 +63,13 @@ public class Help extends ParseObject{
         return (ParseGeoPoint) get("location");
     }
 
-    public static List<Help> GetHelpOutOfCloseness(double latitude, double longitude, int zoom) throws ParseException {
+    public static void GetHelpOutOfCloseness(double latitude,
+                                             double longitude,
+                                             int zoom, FindCallback<Help> callback) {
+
         ParseGeoPoint userLocation = new ParseGeoPoint(latitude, longitude);
         ParseQuery<Help> query = ParseQuery.getQuery("Help");
         ParseQuery<Help> helps = query.whereWithinKilometers("location", userLocation, (zoom > 17 ? zoom - 17 : 1) * 2);
-        return helps.find();
+        helps.findInBackground(callback);
     }
 }

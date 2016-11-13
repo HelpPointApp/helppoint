@@ -1,5 +1,6 @@
 package com.example.reubert.appcadeirantes.view;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 import com.example.reubert.appcadeirantes.R;
 import com.example.reubert.appcadeirantes.model.Help;
 import com.example.reubert.appcadeirantes.model.User;
+import com.parse.LogInCallback;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -37,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         );
 
         ParseUser user = User.getCurrentUser();
+
         if (user != null) {
             Intent mapsActivity = new Intent(LoginActivity.this, MapsActivity.class);
             mapsActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -64,23 +68,38 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new SignInButtonHandler());
     }
 
-
     public class SignInButtonHandler implements View.OnClickListener {
         @Override
         public void onClick(View clickedView){
+            final View view = clickedView;
+            final ProgressDialog progressDialog = new ProgressDialog(view.getContext());
+
             EditText userName = (EditText) findViewById(R.id.edtEmail);
             EditText password = (EditText) findViewById(R.id.edtPassword);
-            try {
-                ParseUser parseUser = User.logIn(userName.getText().toString(), password.getText().toString());
-                Intent mapsActivity = new Intent(LoginActivity.this, MapsActivity.class);
-                mapsActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(mapsActivity);
-            } catch(Exception e){
-                AlertDialog.Builder builder = new AlertDialog.Builder(clickedView.getContext());
-                builder.setTitle("Falha ao entrar");
-                builder.setMessage("E-mail ou senha incorreta.");
-                builder.show();
-            }
+
+            progressDialog.setTitle("Autenticando");
+            progressDialog.setMessage("Aguarde enquanto realizamos a autenticação.");
+            progressDialog.show();
+
+            User.logInInBackground(
+                userName.getText().toString(), password.getText().toString(), new LogInCallback() {
+                    @Override
+                    public void done(ParseUser user, ParseException e) {
+                        progressDialog.dismiss();
+                        if (user != null) {
+                            Intent mapsActivity = new Intent(
+                                    LoginActivity.this, MapsActivity.class);
+                            mapsActivity.setFlags(
+                                    Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(mapsActivity);
+                        }else{
+                            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                            builder.setTitle("Falha ao entrar");
+                            builder.setMessage("E-mail ou senha incorreta.");
+                            builder.show();
+                        }
+                    }
+                });
         }
     }
 
