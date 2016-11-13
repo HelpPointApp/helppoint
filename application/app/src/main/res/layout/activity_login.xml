@@ -10,45 +10,22 @@
     tools:context=".view.LoginActivity"
     android:background="@drawable/map_background">
 
-    <TextView
-        android:text="Não é cadastrado ainda?"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="38dp"
-        android:layout_marginStart="38dp"
-        android:layout_marginBottom="25dp"
-        android:id="@+id/lblNotRegisteredYet"
-        android:textColor="@color/lightText"/>
+    <!-- Not registered yet? -->
 
-    <TextView
-        android:text="Criar uma conta."
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/lblNotRegisteredYet"
-        android:layout_toRightOf="@+id/lblNotRegisteredYet"
-        android:layout_toEndOf="@+id/lblNotRegisteredYet"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
-        android:id="@+id/lblSignUp"
-        android:textColor="@color/colorPrimary" />
+    <!-- Create an account -->
 
+    <!-- Enter -->
     <Button
         android:text="Entrar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/lblNotRegisteredYet"
-        android:layout_marginBottom="19dp"
+        android:layout_marginBottom="30dp"
         android:id="@+id/btnLogin"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:background="@color/colorPrimary"
-        android:textColor="@color/lightText"/>
+        android:textColor="@color/lightText"
+        android:layout_above="@+id/viewSignupFooter"/>
 
+    <!-- Password -->
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -57,20 +34,22 @@
         android:layout_above="@+id/btnLogin"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="18dp"
+        android:layout_marginBottom="25dp"
         android:id="@+id/edtPassword"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:hint="Senha"
         android:textColor="@color/lightText"
-        android:textColorHint="@color/lightText"/>
+        android:textColorHint="@color/lightText"
+        android:backgroundTint="@color/lightText"/>
 
+    <!-- E-mail -->
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
-        android:layout_marginBottom="13dp"
+        android:layout_marginBottom="15dp"
         android:id="@+id/edtEmail"
         android:hint="E-mail"
         android:layout_above="@+id/edtPassword"
@@ -78,7 +57,35 @@
         android:layout_alignParentStart="true"
         android:textColor="@color/lightText"
         android:textColorHint="@color/lightText"
-        android:singleLine="true"
         android:maxLines="1"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp"
+        android:id="@+id/viewSignupFooter">
+
+        <TextView
+            android:text="@string/not_registered_yet"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/lblNotRegisteredYet"
+            android:textColor="@color/lightText"
+            android:textSize="15sp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:text="@string/create_an_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:id="@+id/lblSignUp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"/>
+    </LinearLayout>
 
 </RelativeLayout>

@@ -11,6 +11,8 @@
     <string name="signup">Registrar</string>
     <string name="cancel">Cancelar</string>
     <string name="title_activity_maps">Map</string>
+    <string name="create_an_account">Criar uma conta</string>
+    <string name="not_registered_yet">Não é cadastrado ainda?</string>
 
     <!-- Back4app -->
     <string name="parse_app_id">Lw7z2ythkSBQRww4bn9Rb5Zb15Ss202TYgrcfFdE</string>
