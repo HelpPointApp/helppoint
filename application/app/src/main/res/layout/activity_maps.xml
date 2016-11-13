@@ -13,7 +13,8 @@
     android:id="@+id/viewRelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/Theme.AppCompat">
 
     <fragment
         android:layout_width="match_parent"
@@ -22,7 +23,8 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         tools:context="com.example.reubert.appcadeirantes.view.MapsActivity"
         android:layout_marginBottom="70dp"
-        android:layout_below="@+id/relativeLayout" />
+        android:layout_below="@+id/relativeLayout"
+        android:theme="@style/Theme.AppCompat"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -32,9 +32,7 @@ public class ProfileActivity extends AppCompatActivity {
         txtEmail = (TextView) findViewById(R.id.txtProfileEmail);
         txtNascimento = (TextView) findViewById(R.id.txtProfileNascimento);
         txtCpf        = (TextView) findViewById(R.id.txtProfileCpf);
-
         btnVoltar     = (Button) findViewById(R.id.btnProfileVoltar);
-
         imgPerfil     = (ImageView) findViewById(R.id.imgProfile);
     }
 }
