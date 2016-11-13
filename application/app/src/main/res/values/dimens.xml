@@ -6,4 +6,5 @@
     <!-- Sizes for text input elements -->
     <dimen name="edt_small_height">44dp</dimen>
     <dimen name="edt_small_font">22dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>
