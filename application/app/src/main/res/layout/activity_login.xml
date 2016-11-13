@@ -7,58 +7,78 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".view.LoginActivity">
+    tools:context=".view.LoginActivity"
+    android:background="@drawable/map_background">
 
-    <!-- Username -->
-    <EditText
+    <TextView
+        android:text="Não é cadastrado ainda?"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/edtUserName"
-        android:hint="@string/username"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginLeft="38dp"
+        android:layout_marginStart="38dp"
+        android:layout_marginBottom="25dp"
+        android:id="@+id/lblNotRegisteredYet"
+        android:textColor="@color/lightText"/>
 
-    <!-- Password -->
-    <EditText
+    <TextView
+        android:text="Criar uma conta."
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/lblNotRegisteredYet"
+        android:layout_toRightOf="@+id/lblNotRegisteredYet"
+        android:layout_toEndOf="@+id/lblNotRegisteredYet"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:id="@+id/lblSignUp"
+        android:textColor="@color/colorPrimary" />
+
+    <Button
+        android:text="Entrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/lblNotRegisteredYet"
+        android:layout_marginBottom="19dp"
+        android:id="@+id/btnLogin"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/lightText"/>
+
+    <EditText
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:id="@+id/edtPassword"
-        android:hint="@string/password"
-        android:layout_below="@id/edtUserName"
-        android:layout_alignLeft="@+id/btnSignUp"
-        android:layout_alignStart="@+id/btnSignUp"
-        android:layout_alignRight="@+id/btnSignUp"
-        android:layout_alignEnd="@+id/btnSignUp" />
-
-    <!-- Signin -->
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Entrar"
-        android:id="@+id/btnSignIn"
-        android:background="@color/colorPrimaryDark"
-        android:layout_alignLeft="@+id/btnSignUp"
-        android:layout_alignStart="@+id/btnSignUp"
-        android:layout_alignEnd="@+id/btnSignUp"
-        android:layout_alignRight="@+id/btnSignUp"
-        android:layout_above="@+id/btnSignUp"
-        android:textColor="@color/lightText"/>
-
-    <!-- Signup -->
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cadastrar"
-        android:id="@+id/btnSignUp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorPrimary"
+        android:ems="10"
+        android:layout_above="@+id/btnLogin"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:textColor="@color/lightText"/>
+        android:layout_marginBottom="18dp"
+        android:id="@+id/edtPassword"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:hint="Senha"
+        android:textColor="@color/lightText"
+        android:textColorHint="@color/lightText"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:layout_marginBottom="13dp"
+        android:id="@+id/edtEmail"
+        android:hint="E-mail"
+        android:layout_above="@+id/edtPassword"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/lightText"
+        android:textColorHint="@color/lightText"
+        android:singleLine="true"
+        android:maxLines="1"/>
 
 </RelativeLayout>

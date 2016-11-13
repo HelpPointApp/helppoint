@@ -1,14 +1,13 @@
 package com.example.reubert.appcadeirantes.view;
 
 import android.content.Intent;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.reubert.appcadeirantes.R;
 import com.example.reubert.appcadeirantes.model.Help;
@@ -19,10 +18,10 @@ import com.parse.ParseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public EditText edtUserName;
+    public EditText edtEmail;
     public EditText edtPassword;
-    public Button btnSignIn;
-    public Button btnSignUp;
+    public TextView lblSignUp;
+    public Button btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,40 +52,39 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void loadAllViewElements(){
-        this.btnSignIn = (Button) findViewById(R.id.btnSignIn);
-        this.btnSignUp = (Button) findViewById(R.id.btnSignUp);
-        this.edtUserName = (EditText) findViewById(R.id.edtUserName);
+        this.lblSignUp = (TextView) findViewById(R.id.lblSignUp);
+        this.btnLogin = (Button) findViewById(R.id.btnLogin);
+        this.edtEmail = (EditText) findViewById(R.id.edtEmail);
         this.edtPassword = (EditText) findViewById(R.id.edtPassword);
     }
 
 
     public void createClickListeners(){
-        btnSignIn.setOnClickListener(new SignInButtonHandler());
-        btnSignUp.setOnClickListener(new SignUpButtonHandler());
+        lblSignUp.setOnClickListener(new SignUpLabelHandler());
+        btnLogin.setOnClickListener(new SignInButtonHandler());
     }
 
 
     public class SignInButtonHandler implements View.OnClickListener {
         @Override
         public void onClick(View clickedView){
-            EditText userName = (EditText) findViewById(R.id.edtUserName);
+            EditText userName = (EditText) findViewById(R.id.edtEmail);
             EditText password = (EditText) findViewById(R.id.edtPassword);
             try {
                 ParseUser parseUser = User.logIn(userName.getText().toString(), password.getText().toString());
                 Intent mapsActivity = new Intent(LoginActivity.this, MapsActivity.class);
                 mapsActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(mapsActivity);
-            }catch(Exception e){
+            } catch(Exception e){
                 AlertDialog.Builder builder = new AlertDialog.Builder(clickedView.getContext());
-                builder.setTitle("login");
-                builder.setMessage("username ou password incorreto.");
+                builder.setTitle("Falha ao entrar");
+                builder.setMessage("E-mail ou senha incorreta.");
                 builder.show();
             }
         }
     }
 
-
-    public class SignUpButtonHandler implements View.OnClickListener {
+    public class SignUpLabelHandler implements View.OnClickListener {
         @Override
         public void onClick(View clickedView){
             loadUserRegisterScreen();

@@ -13,7 +13,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edtUsername"
+        android:id="@+id/edtUserName"
         android:inputType="text"
         android:hint="@string/username"/>
 
@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/signup"
-        android:id="@+id/btnSignUp"
+        android:id="@+id/btnLogin"
         android:layout_above="@+id/btnCancel"
         android:layout_alignStart="@+id/btnCancel"
         android:layout_alignEnd="@+id/btnCancel"

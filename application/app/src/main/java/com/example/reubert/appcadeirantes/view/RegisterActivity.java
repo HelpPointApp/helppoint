@@ -39,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
         edtPasswordAgain = (EditText) findViewById(R.id.edtPasswordAgain);
 //        edtCPF           = (EditText) findViewById(R.id.edtCPF);
 //        edtBirthday      = (EditText) findViewById(R.id.edtBirthday);
-        btnSignUp        = (Button) findViewById(R.id.btnSignUp);
+        btnSignUp        = (Button) findViewById(R.id.btnLogin);
         btnCancel        = (Button) findViewById(R.id.btnCancel);
     }
 
