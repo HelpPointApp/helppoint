@@ -38,6 +38,14 @@ public class User extends ParseUser{
         return getInt("points");
     }
 
+    public void setCPF(String cpf){
+        put("cpf", cpf);
+    }
+
+    public String getCPF(){
+        return getString("cpf");
+    }
+
     public void setLastPosition(double latitude, double longitude){
         ParseGeoPoint point = new ParseGeoPoint(latitude, longitude);
         put("lastLocation", point);
