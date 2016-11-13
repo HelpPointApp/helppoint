@@ -51,7 +51,21 @@ public class User extends ParseUser{
         put("lastLocation", point);
     }
 
-    private ParseGeoPoint getLastPosition(){
+    public ParseGeoPoint getLastPosition(){
         return (ParseGeoPoint) get("lastLocation");
+    }
+
+    public void setStatus(STATUS status){
+        put("status", status);
+    }
+
+    public STATUS getStatus(){
+        return (STATUS) get("status");
+    }
+
+    public enum STATUS{
+        Hidden,
+        Helping,
+        RequestingHelp,
     }
 }

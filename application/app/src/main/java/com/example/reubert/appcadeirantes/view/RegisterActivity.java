@@ -90,7 +90,8 @@ public class RegisterActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     if (e == null) {
                         Intent mapsActivity = new Intent(RegisterActivity.this, MapsActivity.class);
-                        mapsActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mapsActivity.setFlags(
+                                Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(mapsActivity);
                     }else{
                         AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());

@@ -12,7 +12,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
         <meta-data
             android:name="com.parse.APPLICATION_ID"
             android:value="@string/parse_app_id" />
@@ -46,8 +45,12 @@
         <activity
             android:name=".view.MapsActivity"
             android:label="@string/title_activity_maps"
-            android:theme="@style/Theme.AppCompat"/>
-        <activity android:name=".view.ProfileActivity"></activity>
+            android:theme="@style/Theme.AppCompat" />
+        <activity android:name=".view.ProfileActivity" />
+        <activity
+            android:name=".view.HelpActivity"
+            android:label="@string/title_activity_help"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

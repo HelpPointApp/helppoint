@@ -1,6 +1,7 @@
 package com.example.reubert.appcadeirantes.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -120,10 +121,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 try {
                     userTarget.fetchIfNeeded();
                     // not working, error: java.lang.IllegalStateException: You need to use a Theme.AppCompat theme (or descendant) with this activity
-                    AlertDialog.Builder alertBuild = new AlertDialog.Builder(context);
-                    alertBuild.setTitle("Ajuda");
-                    alertBuild.setMessage("Ajude ao " + userTarget.get("name") + "!");
-                    alertBuild.show();
+                    Intent helpActivity = new Intent(MapsActivity.this, HelpActivity.class);
+                    helpActivity.putExtra("objectId", help.getObjectId());
+                    startActivity(helpActivity);
                 }catch (Exception e) {
                     Log.e("markerclick", e.toString());
                 }
