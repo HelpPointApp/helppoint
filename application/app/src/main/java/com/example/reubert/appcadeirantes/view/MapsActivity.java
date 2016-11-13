@@ -5,10 +5,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.TextView;
 
 import com.example.reubert.appcadeirantes.R;
@@ -46,7 +43,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        TextView pointsValue = (TextView) findViewById(R.id.myPointsValue);
+        TextView pointsValue = (TextView) findViewById(R.id.lblPoints);
 
         try{
             this.user = User.getCurrentUser();

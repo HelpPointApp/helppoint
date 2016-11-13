@@ -10,6 +10,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/viewRelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,56 +27,50 @@
         android:theme="@style/Theme.AppCompat"
         android:layout_alignParentBottom="true" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/view">
-
-        <Button
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Pedir ajuda"
-        android:id="@+id/btnRequestHelp"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/lightText"
-            android:layout_marginLeft="80dp"
-            android:layout_marginRight="80dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="10dp" />
-
-    </RelativeLayout>
 
     <RelativeLayout
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/relativeLayout"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:id="@+id/viewTopbar"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin">
 
-        <TextView
-            android:text="Meus pontos: "
-            android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
-            android:id="@+id/myPointsLabel"
+            app:srcCompat="@drawable/ic_diamond"
+            android:id="@+id/imageView"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="17dp"
-            android:layout_marginStart="17dp"
-            android:textColor="@color/lightText"/>
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <TextView
             android:text="0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/myPointsValue"
-            android:layout_alignBaseline="@+id/myPointsLabel"
-            android:layout_alignBottom="@+id/myPointsLabel"
-            android:layout_toRightOf="@+id/myPointsLabel"
-            android:layout_toEndOf="@+id/myPointsLabel"
-            android:textColor="@color/lightText" />
+            android:id="@+id/lblPoints"
+            android:textColor="@color/lightText"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/imageView"
+            android:layout_toStartOf="@+id/imageView" />
     </RelativeLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/request_help"
+        android:id="@+id/btnRequestHelp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/lightText"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="30dp"
+        android:paddingStart="30dp"
+        android:paddingRight="30dp"
+        android:paddingEnd="30dp"/>
 
 
 </RelativeLayout>

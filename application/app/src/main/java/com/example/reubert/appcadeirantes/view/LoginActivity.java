@@ -41,14 +41,12 @@ public class LoginActivity extends AppCompatActivity {
 
         ParseUser user = User.getCurrentUser();
 
-        /*
         if (user != null) {
             Intent mapsActivity = new Intent(LoginActivity.this, MapsActivity.class);
             mapsActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(mapsActivity);
             finish();
         }
-        */
 
         setContentView(R.layout.activity_login);
 
