@@ -50,7 +50,8 @@
         <activity
             android:name=".view.HelpActivity"
             android:label="@string/title_activity_help"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".view.RequestHelpActivity"></activity>
     </application>
 
 </manifest>

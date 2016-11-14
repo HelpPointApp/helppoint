@@ -57,7 +57,7 @@ public class User extends ParseUser{
 
     public enum STATUS{
         Hidden,
-        Helping,
         RequestingHelp,
+        HelpInProgress,
     }
 }

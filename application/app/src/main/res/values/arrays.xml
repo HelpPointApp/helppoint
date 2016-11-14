@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="help_array">
+        <item value="0">Carregar sacolas</item>
+        <item value="1">Escadas</item>
+    </string-array>
+</resources>

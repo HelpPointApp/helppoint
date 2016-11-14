@@ -1,14 +1,12 @@
 package com.example.reubert.appcadeirantes.view;
 
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.reubert.appcadeirantes.R;
@@ -36,7 +34,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GPSManager gpsManager;
     private ParseUser user;
     private List<Help> helps;
-    private List<Marker> markers;
 
     private double _lat;
     private double _long;
@@ -50,22 +47,82 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         try{
             this.user = User.getCurrentUser();
+            this.user.fetchIfNeeded();
+            int status = this.user.getInt("status");
             pointsValue.setText(String.valueOf(this.user.getInt("points")));
+
+            if (User.STATUS.values()[status] != User.STATUS.Hidden){
+                Help.getHelpByUserHelper(this.user, new FindCallback<Help>() {
+                    @Override
+                    public void done(List<Help> objects, ParseException e) {
+
+                        if(e == null){
+                            if (objects.size() > 0){
+                                Help help = objects.get(0);
+                                Intent helpActivity = new Intent(MapsActivity.this, HelpActivity.class);
+                                helpActivity.putExtra("objectId", help.getObjectId());
+                                startActivity(helpActivity);
+                            }
+                        }
+                        else{
+                            Log.e("statuserror", e.toString());
+                        }
+                    }
+                });
+            }
         }catch(Exception e){
             Log.e("pointerror", e.toString());
         }
+
         SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        Button btnRequestHelp = (Button) findViewById(R.id.btnRequestHelp);
+        btnRequestHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent helpActivity = new Intent(MapsActivity.this, RequestHelpActivity.class);
+                startActivity(helpActivity);
+            }
+        });
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        this.googleMap = googleMap;
+    protected void onResume(){
+        super.onResume();
+
+        if(this.googleMap != null) {
+            updateHelpMarkers();
+        }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap _googleMap) {
+        this.googleMap = _googleMap;
+
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                LatLng location = marker.getPosition();
+                Help help = getHelpByMarkerLocation(location.latitude, location.longitude);
+                ParseUser userTarget = help.getUserTarget();
+                try {
+                    userTarget.fetchIfNeeded();
+                    Intent helpActivity = new Intent(MapsActivity.this, HelpActivity.class);
+                    helpActivity.putExtra("objectId", help.getObjectId());
+                    startActivity(helpActivity);
+                }catch (Exception e) {
+                    Log.e("markerclick", e.toString());
+                }
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 17));
+                return true;
+            }
+        });
 
         configureGPS();
         configureMap();
         focusOnCurrentUserPosition();
-        addHelpMarkers();
+        updateHelpMarkers();
     }
 
     private void configureGPS(){
@@ -91,11 +148,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return null;
     }
 
-    private void addHelpMarkers(){
+    private void updateHelpMarkers(){
         double latitude = this._lat;
         double longitude = this._long;
         int zoom = (int) googleMap.getCameraPosition().zoom;
-        final Context context = this.getApplicationContext();
 
         googleMap.clear();
         Help.GetHelpOutOfCloseness(latitude, longitude, zoom, new FindCallback<Help>() {
@@ -111,30 +167,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });
-
-        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                LatLng location = marker.getPosition();
-                Help help = getHelpByMarkerLocation(location.latitude, location.longitude);
-                ParseUser userTarget = help.getUserTarget();
-                try {
-                    userTarget.fetchIfNeeded();
-                    // not working, error: java.lang.IllegalStateException: You need to use a Theme.AppCompat theme (or descendant) with this activity
-                    Intent helpActivity = new Intent(MapsActivity.this, HelpActivity.class);
-                    helpActivity.putExtra("objectId", help.getObjectId());
-                    startActivity(helpActivity);
-                }catch (Exception e) {
-                    Log.e("markerclick", e.toString());
-                }
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 17));
-                return true;
-            }
-        });
     }
 
     private void focusOnCurrentUserPosition(){
         Location userLocation = gpsManager.getUserLocation();
+
         double latitude;
         double longitude;
 

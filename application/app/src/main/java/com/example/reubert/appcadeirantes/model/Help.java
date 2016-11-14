@@ -84,8 +84,17 @@ public class Help extends ParseObject{
     }
 
     public void finish(SaveCallback saveCallback){
+        ParseUser userHelp = this.getUserHelp();
+        ParseUser userTarget = this.getUserTarget();
+
+        userTarget.put("status", User.STATUS.Hidden.ordinal());
+        userHelp.put("status", User.STATUS.Hidden.ordinal());
+
         this.setStatus(STATUS.Finished);
         this.saveInBackground(saveCallback);
+
+        userTarget.saveInBackground();
+        userHelp.saveInBackground();
     }
 
     public static Help getHelp(String objectId){
@@ -107,19 +116,33 @@ public class Help extends ParseObject{
         ParseQuery<Help> query = ParseQuery.getQuery("Help");
         ParseQuery<Help> helps = query.whereWithinKilometers(
                 "location", userLocation, (zoom > 17 ? zoom - 17 : 1) * 2);
+        helps = helps.whereEqualTo("status", STATUS.Requesting.ordinal());
         helps.findInBackground(callback);
     }
 
-    public static void createHelp(User user,
-                                  TYPE type,
+    public static void createHelp(ParseUser user,
+                                  int type,
                                   String description,
+                                  double latitude,
+                                  double longitude,
                                   SaveCallback saveCallback){
         Help help = new Help();
-        help.setTypeHelp(type);
+        help.setTypeHelp(TYPE.values()[type]);
         help.setDescription(description);
-        help.setUserHelp((ParseUser) user);
+        help.setUserTarget(user);
         help.setStatus(STATUS.Requesting);
+        help.setLocation(latitude, longitude);
         help.saveInBackground(saveCallback);
+
+        user.put("status", User.STATUS.RequestingHelp.ordinal());
+    }
+
+    public static void getHelpByUserHelper(ParseUser user, FindCallback<Help> callback){
+        ParseQuery<Help> helpQuery = ParseQuery.getQuery("Help");
+        helpQuery = helpQuery
+                .whereEqualTo("userHelp", user)
+                .whereEqualTo("status", STATUS.Helping.ordinal());
+        helpQuery.findInBackground(callback);
     }
 
     public static void UserRequestHelped(String helpObjectId,
@@ -128,21 +151,20 @@ public class Help extends ParseObject{
         final Help help = getHelp(helpObjectId);
         if (help == null) return;
 
-        ParseUser userHelp = help.getUserHelp();
+        final ParseUser userHelp = help.getUserHelp();
+        final ParseUser userTarget = help.getUserTarget();
 
         if (userHelp == null){
-            help.setUserHelp((ParseUser) user);
+            help.setUserHelp(user);
             help.setStatus(STATUS.Helping);
             help.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
                     callback.requestHelped(help);
-                    try {
-                        user.put("status", User.STATUS.Helping);
-                        user.save();
-                    }catch(ParseException eUser){
-                        Log.e("change status", eUser.toString());
-                    }
+                    user.put("status", User.STATUS.HelpInProgress.ordinal());
+                    user.saveInBackground();
+                    userTarget.put("status", User.STATUS.HelpInProgress.ordinal());
+                    userTarget.saveInBackground();
                 }
             });
         }else{
