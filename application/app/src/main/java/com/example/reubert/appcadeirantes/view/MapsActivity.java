@@ -43,7 +43,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        TextView pointsValue = (TextView) findViewById(R.id.myPointsValue);
+        TextView pointsValue = (TextView) findViewById(R.id.lblPoints);
 
         try{
             this.user = User.getCurrentUser();

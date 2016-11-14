@@ -1,74 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context=".view.RegisterActivity">
 
-    <EditText
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/edtEmail"
-        android:inputType="textEmailAddress"
-        android:hint="@string/email"/>
+        android:layout_height="60dp"
+        android:id="@+id/viewTopbar"
+        android:background="@color/colorPrimary"
+        android:paddingLeft="@dimen/activity_horizontal_margin">
 
-    <EditText
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            app:srcCompat="@drawable/back_symbol"
+            android:id="@+id/btnBack"
+            android:clickable="true"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:id="@+id/edtPassword"
-        android:hint="@string/password"
-        android:layout_below="@+id/edtEmail"
-        />
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:id="@+id/edtPasswordAgain"
-        android:hint="@string/repeatPassword"
-        android:layout_below="@+id/edtPassword"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edtEmail"
+            android:inputType="textEmailAddress"
+            android:hint="@string/email"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/textColorOnLight"
+            android:textColor="@color/textColorOnLight"/>
 
-    <!--<EditText-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/edtCPF"-->
-        <!--android:hint="@string/cpf"-->
-        <!--android:layout_below="@+id/edtPasswordAgain"/>-->
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:id="@+id/edtPassword"
+            android:hint="@string/password"
+            android:layout_below="@+id/edtEmail"
+            android:backgroundTint="@color/textColorOnLight"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/textColorOnLight"/>
 
-    <!--<EditText-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:inputType="date"-->
-        <!--android:id="@+id/edtBirthday"-->
-        <!--android:hint="@string/dateBirthday"-->
-        <!--android:layout_below="@+id/edtCPF"/>-->
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:id="@+id/edtPasswordAgain"
+            android:hint="@string/repeatPassword"
+            android:layout_below="@+id/edtPassword"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="@color/textColorOnLight"
+            android:textColor="@color/textColorOnLight"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/signup"
-        android:id="@+id/btnLogin"
-        android:layout_above="@+id/btnCancel"
-        android:layout_alignStart="@+id/btnCancel"
-        android:layout_alignEnd="@+id/btnCancel"
-        android:layout_alignLeft="@+id/btnCancel"
-        android:layout_alignRight="@+id/btnCancel"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edtCPF"
+            android:hint="@string/cpf"
+            android:layout_below="@+id/edtPasswordAgain"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="@color/textColorOnLight"
+            android:textColor="@color/textColorOnLight"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/cancel"
-        android:id="@+id/btnCancel"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:id="@+id/edtBirthday"
+            android:hint="@string/dateBirthday"
+            android:layout_below="@+id/edtCPF"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="@color/textColorOnLight"
+            android:textColor="@color/textColorOnLight"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_account"
+            android:id="@+id/btnCreateAccount"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/lightText"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

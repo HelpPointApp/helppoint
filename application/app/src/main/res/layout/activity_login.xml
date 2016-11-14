@@ -10,11 +10,6 @@
     tools:context=".view.LoginActivity"
     android:background="@drawable/map_background">
 
-    <!-- Not registered yet? -->
-
-    <!-- Create an account -->
-
-    <!-- Enter -->
     <Button
         android:text="Entrar"
         android:layout_width="match_parent"
@@ -25,7 +20,6 @@
         android:textColor="@color/lightText"
         android:layout_above="@+id/viewSignupFooter"/>
 
-    <!-- Password -->
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,7 +37,6 @@
         android:textColorHint="@color/lightText"
         android:backgroundTint="@color/lightText"/>
 
-    <!-- E-mail -->
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
