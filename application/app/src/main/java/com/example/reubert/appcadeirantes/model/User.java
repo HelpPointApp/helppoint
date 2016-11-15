@@ -13,7 +13,7 @@ public class User extends ParseUser {
         HelpInProgress,
     }
 
-    public User setFirstName (String name){
+    public ParseUser setFirstName (String name){
         put("firstName", name);
         return this;
     }
@@ -22,7 +22,7 @@ public class User extends ParseUser {
         return getString("firstName");
     }
 
-    public User setLastName(String lastName){
+    public ParseUser setLastName(String lastName){
         put("lastName", lastName);
         return this;
     }
