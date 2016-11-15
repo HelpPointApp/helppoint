@@ -18,7 +18,6 @@ import com.parse.SaveCallback;
 
 public class HelpActivity extends AppCompatActivity {
 
-    private String objectId;
     private Help help;
     private ParseUser user;
     private HandleCheckStatusHelp handleCheckStatus;
@@ -31,14 +30,13 @@ public class HelpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_help);
+        this.setContentView(R.layout.activity_help);
 
         final String objectId = getIntent().getExtras().getString("objectId");
         final Button buttonHelp = (Button) findViewById(R.id.btnHelped);
-        final ProgressDialog progressDialog = new ProgressDialog(this);
 
-        user = User.getCurrentUser();
-        help = Help.getHelp(objectId);
+        this.user = User.getCurrentUser();
+        this.help = Help.getHelp(objectId);
 
         this.onChangeActions();
     }
@@ -51,11 +49,18 @@ public class HelpActivity extends AppCompatActivity {
             buttonHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Help.UserRequestHelped(objectId, user, new Help.RequestHelpedCallback() {
+                    progressDialog.setTitle("Ajuda");
+                    progressDialog.setMessage("Aguarde, o pedido está feito");
+                    progressDialog.show();
+
+                    Help.UserRequestHelped(help.getObjectId(), user, new Help.RequestHelpedCallback() {
                         @Override
-                        public void requestHelped(Help _help) {
+                        public void requestHelper(Help _help) {
+                            progressDialog.dismiss();
                             if (_help != null) {
                                 help = _help;
+                                handleCheckStatus = new HandleCheckStatusHelp();
+                                handleCheckStatus.start();
                                 buttonHelp.setVisibility(View.INVISIBLE);
                             } else {
                                 finish();
@@ -139,9 +144,13 @@ public class HelpActivity extends AppCompatActivity {
         @Override
         public void run() {
             boolean running = true;
+            final Help _help = help;
+
+            Log.e("thread", String.valueOf(_help.getObjectId()));
+
             while (running) {
                 try {
-                    Help help = Help.getHelp(objectId);
+                    Help help = Help.getHelp(_help.getObjectId());
 
                     if (help.getStatus() == Help.STATUS.Finished) {
                         running = false;

@@ -3,6 +3,7 @@ package com.example.reubert.appcadeirantes.model;
 import android.util.Log;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
@@ -92,8 +93,9 @@ public class Help extends ParseObject{
         avaliation.saveInBackground(saveCallback);
     }
 
-    public void cancel(){
+    public void cancel(SaveCallback callback){
         this.setStatus(STATUS.Canceled);
+        this.saveInBackground(callback);
     }
 
     public void finish(SaveCallback saveCallback){
@@ -119,6 +121,11 @@ public class Help extends ParseObject{
         }
 
         return null;
+    }
+
+    public static void getHelpInBackground(String objectId, GetCallback<Help> callback){
+        ParseQuery<Help> query = ParseQuery.getQuery("Help");
+        query.getInBackground(objectId, callback);
     }
 
     public static void GetHelpOutOfCloseness(double latitude,
@@ -163,7 +170,11 @@ public class Help extends ParseObject{
                                          final ParseUser user,
                                          final RequestHelpedCallback callback){
         final Help help = getHelp(helpObjectId);
-        if (help == null) return;
+
+        if (help == null) {
+            callback.requestHelper(null);
+            return;
+        }
 
         final ParseUser userHelp = help.getUserHelp();
         final ParseUser userTarget = help.getUserTarget();
@@ -174,15 +185,19 @@ public class Help extends ParseObject{
             help.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
-                    user.put("status", User.STATUS.HelpInProgress.ordinal());
-                    user.saveInBackground();
-                    userTarget.put("status", User.STATUS.HelpInProgress.ordinal());
-                    userTarget.saveInBackground();
-                    callback.requestHelped(help);
+                    if (e != null){
+                        callback.requestHelper(help);
+                        user.put("status", User.STATUS.HelpInProgress.ordinal());
+                        user.saveInBackground();
+                        userTarget.put("status", User.STATUS.HelpInProgress.ordinal());
+                        userTarget.saveInBackground();
+                    }else{
+                        callback.requestHelper(null);
+                    }
                 }
             });
         }else{
-            callback.requestHelped(null);
+            callback.requestHelper(null);
         }
     }
 
@@ -194,6 +209,6 @@ public class Help extends ParseObject{
     }
 
     public static class RequestHelpedCallback{
-        public void requestHelped(Help help){}
+        public void requestHelper(Help help){}
     }
 }
