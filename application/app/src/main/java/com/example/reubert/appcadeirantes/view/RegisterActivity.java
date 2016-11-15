@@ -22,6 +22,7 @@ public class RegisterActivity extends AppCompatActivity {
     public EditText edtPasswordAgain;
     public EditText edtCPF;
     public EditText edtBirthday;
+
     public ImageView btnBack;
 
     public Button btnCreateAccount;
@@ -37,13 +38,13 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     public void loadAllViewElements(){
-        edtEmail = (EditText) findViewById(R.id.edtEmail);
-        edtPassword = (EditText) findViewById(R.id.edtPassword);
+        edtEmail         = (EditText) findViewById(R.id.edtEmail);
+        edtPassword      = (EditText) findViewById(R.id.edtPassword);
         edtPasswordAgain = (EditText) findViewById(R.id.edtPasswordAgain);
-        edtCPF = (EditText) findViewById(R.id.edtCPF);
-        edtBirthday = (EditText) findViewById(R.id.edtBirthday);
+        edtCPF           = (EditText) findViewById(R.id.edtCPF);
+        edtBirthday      = (EditText) findViewById(R.id.edtBirthday);
         btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
-        btnBack = (ImageView) findViewById(R.id.btnBack);
+        btnBack          = (ImageView) findViewById(R.id.btnBack);
     }
 
 

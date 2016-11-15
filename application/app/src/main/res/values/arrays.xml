@@ -2,6 +2,6 @@
 <resources>
     <string-array name="help_array">
         <item value="0">Carregar sacolas</item>
-        <item value="1">Escadas</item>
+        <item value="1">Subir as escadas</item>
     </string-array>
 </resources>

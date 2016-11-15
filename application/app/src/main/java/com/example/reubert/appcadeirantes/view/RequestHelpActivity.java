@@ -39,6 +39,7 @@ public class RequestHelpActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
 
         final ParseUser user = User.getCurrentUser();
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Ajuda");
         progressDialog.setMessage("Aguarde enquanto enviamos sua solicitação.");
@@ -48,7 +49,7 @@ public class RequestHelpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressDialog.show();
-                EditText description = (EditText) findViewById(R.id.description);
+                EditText description = (EditText) findViewById(R.id.edtObservation);
                 Location loc = GPSManager.getInstance(getBaseContext()).getUserLocation();
                 int typeHelp = spinner.getSelectedItemPosition();
 

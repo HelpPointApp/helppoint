@@ -33,7 +33,10 @@ public class HelpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
 
-        objectId = getIntent().getExtras().getString("objectId");
+        final String objectId = getIntent().getExtras().getString("objectId");
+        final Button buttonHelp = (Button) findViewById(R.id.btnHelped);
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+
         user = User.getCurrentUser();
         help = Help.getHelp(objectId);
 

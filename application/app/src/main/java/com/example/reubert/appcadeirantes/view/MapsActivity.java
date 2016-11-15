@@ -3,19 +3,20 @@ package com.example.reubert.appcadeirantes.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.example.reubert.appcadeirantes.R;
 import com.example.reubert.appcadeirantes.manager.GPSManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -25,11 +26,11 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
-
 import java.util.List;
 
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+    private TextView lblMyPoints;
 
     private enum Status{
         Idle,
@@ -54,16 +55,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
-        TextView pointsValue = (TextView) findViewById(R.id.lblPoints);
         btnRequestHelp = (Button) findViewById(R.id.btnRequestHelp);
+        TextView lblMyPoints = (TextView) findViewById(R.id.lblPoints);
+
+        configureAppBar();
+        configureTransparencyOnStatusBar();
+        loadAllViewElements();
 
         try{
             this.user = User.getCurrentUser();
             this.user.fetchIfNeeded();
             int status = this.user.getInt("status");
-            pointsValue.setText(String.valueOf(this.user.getInt("points")));
             User.STATUS currentStatus = User.STATUS.values()[status];
+            lblMyPoints.setText(String.valueOf(this.user.getInt("points")));
+
 
             if (currentStatus == User.STATUS.HelpInProgress){
                 Help.getHelpByUserHelper(this.user, new FindCallback<Help>() {
@@ -165,8 +170,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         }else if (requestCode == 2){
-            if (resultCode == Activity.RESULT_OK){
-                this.onChangeStatus(Status.Idle);
+            try{
+                if (resultCode == Activity.RESULT_OK){
+                    helpRequesting = Help.getHelp(data.getExtras().getString("objectId"));
+                    this.onChangeStatus(Status.Idle);
+                }
+            }catch(Exception e){
+                Log.e("error result", e.toString());
             }
         }
     }
@@ -185,6 +195,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (handleRequestHelp != null && handleRequestHelp.isAlive()){
             handleRequestHelp.isInterrupted();
         }
+    }
+
+    private void configureAppBar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+    private void configureTransparencyOnStatusBar(){
+        //LayoutManager.enableTransparentStatusBar(this, (Toolbar) findViewById(R.id.toolbar));
+    }
+
+    private void loadAllViewElements(){
+        lblMyPoints = (TextView) findViewById(R.id.label_my_points);
     }
 
     private void configureGPS(){
@@ -225,6 +248,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     ParseGeoPoint point = help.getLocation();
                     MarkerOptions marker = new MarkerOptions();
                     marker.position(new LatLng(point.getLatitude(), point.getLongitude()));
+                    marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
                     googleMap.addMarker(marker);
                 }
             }

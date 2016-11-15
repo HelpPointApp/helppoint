@@ -58,9 +58,9 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void loadAllViewElements(){
-        this.lblSignUp = (TextView) findViewById(R.id.lblSignUp);
-        this.btnLogin = (Button) findViewById(R.id.btnLogin);
-        this.edtEmail = (EditText) findViewById(R.id.edtEmail);
+        this.lblSignUp   = (TextView) findViewById(R.id.lblSignUp);
+        this.btnLogin    = (Button) findViewById(R.id.btnLogin);
+        this.edtEmail    = (EditText) findViewById(R.id.edtEmail);
         this.edtPassword = (EditText) findViewById(R.id.edtPassword);
     }
 
