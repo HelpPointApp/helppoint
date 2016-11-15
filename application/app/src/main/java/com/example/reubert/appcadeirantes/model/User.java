@@ -1,7 +1,9 @@
 package com.example.reubert.appcadeirantes.model;
 
+import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 @ParseClassName("User")
@@ -13,7 +15,7 @@ public class User extends ParseUser {
         HelpInProgress,
     }
 
-    public ParseUser setFirstName (String name){
+    public User setFirstName (String name){
         put("firstName", name);
         return this;
     }
@@ -22,7 +24,7 @@ public class User extends ParseUser {
         return getString("firstName");
     }
 
-    public ParseUser setLastName(String lastName){
+    public User setLastName(String lastName){
         put("lastName", lastName);
         return this;
     }
@@ -75,5 +77,14 @@ public class User extends ParseUser {
 
     public STATUS getStatus(){
         return (STATUS) get("status");
+    }
+
+    public static void getNearUsers(double latitude,
+                                    double longitude,
+                                    FindCallback<ParseUser> callback){
+        ParseGeoPoint geoPoint = new ParseGeoPoint(latitude, longitude);
+        ParseQuery<ParseUser> userQuery = ParseQuery.getQuery("User");
+        userQuery.whereWithinKilometers("lastPosition", geoPoint, 2);
+        userQuery.findInBackground(callback);
     }
 }

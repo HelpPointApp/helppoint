@@ -12,8 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.example.reubert.appcadeirantes.R;
-import com.example.reubert.appcadeirantes.manager.GPSManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,34 +20,41 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.example.reubert.appcadeirantes.model.Help;
-import com.example.reubert.appcadeirantes.model.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.example.reubert.appcadeirantes.R;
+import com.example.reubert.appcadeirantes.manager.GPSManager;
+import com.example.reubert.appcadeirantes.model.Help;
+import com.example.reubert.appcadeirantes.model.User;
+
 
 import java.util.List;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private TextView lblMyPoints;
-
     private enum Status{
         Idle,
         Requesting,
+        WaitingHelp,
     }
 
+    private TextView lblMyPoints;
+    private Button btnRequestHelp;
+    private Intent requestHelpIntent;
     private GoogleMap googleMap;
     private GPSManager gpsManager;
+    private Context context;
+
     private ParseUser user;
     private List<Help> helps;
-    private Intent requestHelpIntent;
     private Status status;
     private Help helpRequesting;
-    private Button btnRequestHelp;
     private HandleRequestingHelp handleRequestHelp;
+    private HandleRequestHelpPosition handleRequestHelpPosition;
 
     private double _lat;
     private double _long;
@@ -60,14 +65,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_maps);
         btnRequestHelp = (Button) findViewById(R.id.btnRequestHelp);
         TextView lblMyPoints = (TextView) findViewById(R.id.label_my_points);
-
+        context = this;
         configureAppBar();
         configureTransparencyOnStatusBar();
         loadAllViewElements();
 
         try{
             this.user = User.getCurrentUser();
-            this.user.fetchIfNeeded();
+            this.user = this.user.fetch();
             int status = this.user.getInt("status");
             User.STATUS currentStatus = User.STATUS.values()[status];
             lblMyPoints.setText(String.valueOf(this.user.getInt("points")));
@@ -292,7 +297,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             });
         }
-        if (status == Status.Requesting){
+        else if (status == Status.Requesting){
             final Context context = this;
             btnRequestHelp.setText("CANCELAR");
             btnRequestHelp.setOnClickListener(new View.OnClickListener() {
@@ -317,6 +322,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 }
             });
+        }else if (status == Status.WaitingHelp){
+            btnRequestHelp.setText("INICIAR");
+            btnRequestHelp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (handleRequestHelpPosition != null && handleRequestHelpPosition.isInterrupted()){
+                        handleRequestHelp.isInterrupted();
+                    }
+                    startActivityHelp(helpRequesting.getObjectId());
+                }
+            });
         }
         this.status = status;
     }
@@ -327,14 +343,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         startActivityForResult(helpActivity, 2);
     }
 
+    private void waitUserNear(Help help){
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(new LatLng(0, 0));
+        Marker marker = googleMap.addMarker(markerOptions);
+        handleRequestHelpPosition = new HandleRequestHelpPosition(help, marker);
+        handleRequestHelpPosition.start();
+        onChangeStatus(Status.WaitingHelp);
+    }
+
     private class HandleRequestingHelp extends Thread{
         @Override
         public void run(){
             // final String objectId = helpRequesting.getObjectId();
             boolean running = true;
-            while(running){
-                try {
-                    Help help = Help.getHelp(helpRequesting.getObjectId());
+            try {
+                Help help = Help.getHelp(helpRequesting.getObjectId());
+                while(running){
+                    help.fetch();
                     Help.STATUS status = help.getStatus();
 
                     if (status == Help.STATUS.Helping){
@@ -342,16 +368,48 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                startActivityHelp(helpRequesting.getObjectId());
+                                waitUserNear(helpRequesting);
                             }
                         });
                     }
 
                     Thread.sleep(1000);
-                }catch(Exception e){
-                    Log.e("error request helo", e.toString());
                 }
+            }catch(Exception e){
+                Log.e("error request helo", e.toString());
             }
+        }
+    }
+
+    private class HandleRequestHelpPosition extends Thread{
+
+        private Help help;
+        private Marker marker;
+
+        public HandleRequestHelpPosition(Help help, Marker marker){
+            super();
+            this.help = help;
+            this.marker = marker;
+        }
+
+        @Override
+        public void run(){
+            ParseUser user = help.getUserTarget();
+
+            try{
+                while(true){
+                    ParseUser userHelp = user.fetch();
+                    ParseGeoPoint geoPoint = (ParseGeoPoint) userHelp.get("lastPosition");
+                    if (geoPoint != null) {
+                        marker.setPosition(new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()));
+                    }
+                    Thread.sleep(2000);
+                }
+            }catch(Exception e){
+                Log.e("error request position", e.toString());
+            }
+
+            marker.remove();
         }
     }
 }

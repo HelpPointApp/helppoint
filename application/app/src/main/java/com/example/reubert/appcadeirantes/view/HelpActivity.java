@@ -2,7 +2,9 @@ package com.example.reubert.appcadeirantes.view;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,9 +12,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import com.example.reubert.appcadeirantes.R;
+import com.example.reubert.appcadeirantes.manager.GPSManager;
 import com.example.reubert.appcadeirantes.model.Help;
 import com.example.reubert.appcadeirantes.model.User;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -22,6 +27,7 @@ public class HelpActivity extends AppCompatActivity {
     private TextView lblTitle;
     private TextView lblAddress;
     private TextView lblIntervalPoints;
+    private Context context;
 
     private Help help;
     private ParseUser user;
@@ -40,11 +46,10 @@ public class HelpActivity extends AppCompatActivity {
         storeUsefulElementsInProperties();
         updateLabelsBasedOnUser();
 
-        final String objectId = getIntent().getExtras().getString("objectId");
-        final Button buttonHelp = (Button) findViewById(R.id.btnHelped);
-
-        this.user = User.getCurrentUser();
+        String objectId = getIntent().getExtras().getString("objectId");
         this.help = Help.getHelp(objectId);
+        this.user = User.getCurrentUser();
+        this.context = this;
 
         onChangeActions();
     }
@@ -57,11 +62,15 @@ public class HelpActivity extends AppCompatActivity {
     }
 
     public void updateLabelsBasedOnUser(){
-        final String helpObjectId = getIntent().getExtras().getString("objectId");
-        final Help help = Help.getHelp(helpObjectId);
-        //final User user = help.getUserTarget();
-
-        //lblPersonName.setText(user.getFirstName());
+        String helpObjectId = getIntent().getExtras().getString("objectId");
+        Help help = Help.getHelp(helpObjectId);
+        final ParseUser user = help.getUserTarget();
+        user.fetchIfNeededInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser object, ParseException e) {
+                lblPersonName.setText(user.getString("firstName"));
+            }
+        });
     }
 
     public void onChangeActions(){
@@ -72,17 +81,18 @@ public class HelpActivity extends AppCompatActivity {
             buttonHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    final Context context = view.getContext();
                     progressDialog.setTitle("Ajuda");
                     progressDialog.setMessage("Aguarde, o pedido está feito");
                     progressDialog.show();
 
                     Help.UserRequestHelped(help.getObjectId(), user, new Help.RequestHelpedCallback() {
                         @Override
-                        public void requestHelper(Help _help) {
+                        public void requestHelper(Help responseHelp) {
                             progressDialog.dismiss();
-                            if (_help != null) {
-                                help = _help;
-                                handleCheckStatus = new HandleCheckStatusHelp();
+                            if (responseHelp != null) {
+                                help = responseHelp;
+                                handleCheckStatus = new HandleCheckStatusHelp(responseHelp, context);
                                 handleCheckStatus.start();
                                 buttonHelp.setVisibility(View.INVISIBLE);
                             } else {
@@ -108,6 +118,7 @@ public class HelpActivity extends AppCompatActivity {
                                 progressDialog.dismiss();
                                 Intent data = new Intent();
                                 data.putExtra("objectId", help.getObjectId());
+                                data.putExtra("type", 2);
                                 setResult(Activity.RESULT_OK, data);
                                 finish();
                             }
@@ -131,7 +142,7 @@ public class HelpActivity extends AppCompatActivity {
 
     public void startThread(){
         if (handleCheckStatus == null || handleCheckStatus.isInterrupted()) {
-            handleCheckStatus = new HandleCheckStatusHelp();
+            handleCheckStatus = new HandleCheckStatusHelp(help, this);
         }
         handleCheckStatus.start();
     }
@@ -139,12 +150,19 @@ public class HelpActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-/*        Help auxHelp = Help.getHelp(objectId);
-        if (isEqualUser(help.getUserHelp(), this.user) && help.getStatus() == Help.STATUS.Helping) {
-            startThread();
-        }else{
-            finish();
-        }*/
+
+        if (handleCheckStatus == null || handleCheckStatus.isInterrupted()){
+            if (isEqualUser(help.getUserHelp(), user)){
+                help.fetchInBackground(new GetCallback<Help>() {
+                    @Override
+                    public void done(Help object, ParseException e) {
+                        if(object.getStatus() == Help.STATUS.Helping){
+                            handleCheckStatus.start();
+                        }
+                    }
+                });
+            }
+        }
     }
 
     @Override
@@ -164,18 +182,32 @@ public class HelpActivity extends AppCompatActivity {
     }
 
     private class HandleCheckStatusHelp extends Thread{
+
+        private Help help;
+        private Context context;
+
+        public HandleCheckStatusHelp(Help help, Context context){
+            super();
+            this.help = help;
+            this.context = context;
+        }
+
         @Override
         public void run() {
             boolean running = true;
-            final Help _help = help;
+            Help auxHelp;
+            Location userLocation;
+            ParseUser parserUser = this.help.getUserTarget();
+            try {
+                User user = (User) ParseQuery.getQuery("User").get(parserUser.getObjectId());
 
-            Log.e("thread", String.valueOf(_help.getObjectId()));
+                while (running) {
+                    auxHelp = this.help.fetch();
+                    userLocation = GPSManager.getInstance(context).getUserLocation();
+                    user.setLastPosition(userLocation.getLatitude(), userLocation.getLongitude());
+                    user.saveInBackground();
 
-            while (running) {
-                try {
-                    Help help = Help.getHelp(_help.getObjectId());
-
-                    if (help.getStatus() == Help.STATUS.Finished) {
+                    if (auxHelp.getStatus() == Help.STATUS.Finished) {
                         running = false;
                         runOnUiThread(new Runnable() {
                             @Override
@@ -186,9 +218,9 @@ public class HelpActivity extends AppCompatActivity {
                     }
 
                     Thread.sleep(5000);
-                } catch (Exception e) {
-                    Log.e("thread", e.toString());
                 }
+            } catch (Exception e) {
+                Log.e("thread", e.toString());
             }
         }
     }
