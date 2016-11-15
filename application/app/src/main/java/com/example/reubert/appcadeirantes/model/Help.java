@@ -12,15 +12,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-
-/*  Example
-    Help help = new Help();
-    help.setDescription("asd asd sad as da");
-    help.setTypeHelp(1);
-    help.setUserTarget(this.user);
-    help.setLocation(-19.88619068, -44.01296422);
-    help.save();*/
-
 @ParseClassName("Help")
 public class Help extends ParseObject{
 
@@ -128,10 +119,10 @@ public class Help extends ParseObject{
         query.getInBackground(objectId, callback);
     }
 
-    public static void GetHelpOutOfCloseness(double latitude,
-                                             double longitude,
-                                             int zoom, FindCallback<Help> callback) {
-
+    public static void getHelpOutOfCloseness(
+            double latitude, double longitude, int zoom,
+            FindCallback<Help> callback
+    ){
         ParseGeoPoint userLocation = new ParseGeoPoint(latitude, longitude);
         ParseQuery<Help> query = ParseQuery.getQuery("Help");
         ParseQuery<Help> helps = query.whereWithinKilometers(
@@ -196,7 +187,7 @@ public class Help extends ParseObject{
                     }
                 }
             });
-        }else{
+        } else {
             callback.requestHelper(null);
         }
     }

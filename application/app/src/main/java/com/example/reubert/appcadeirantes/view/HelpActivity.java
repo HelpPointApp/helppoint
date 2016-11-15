@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
+import android.widget.TextView;
 import com.example.reubert.appcadeirantes.R;
 import com.example.reubert.appcadeirantes.model.Help;
 import com.example.reubert.appcadeirantes.model.User;
@@ -17,6 +17,11 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 public class HelpActivity extends AppCompatActivity {
+
+    private TextView lblPersonName;
+    private TextView lblTitle;
+    private TextView lblAddress;
+    private TextView lblIntervalPoints;
 
     private Help help;
     private ParseUser user;
@@ -30,7 +35,10 @@ public class HelpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_help);
+        setContentView(R.layout.activity_help);
+
+        storeUsefulElementsInProperties();
+        updateLabelsBasedOnUser();
 
         final String objectId = getIntent().getExtras().getString("objectId");
         final Button buttonHelp = (Button) findViewById(R.id.btnHelped);
@@ -38,7 +46,22 @@ public class HelpActivity extends AppCompatActivity {
         this.user = User.getCurrentUser();
         this.help = Help.getHelp(objectId);
 
-        this.onChangeActions();
+        onChangeActions();
+    }
+
+    public void storeUsefulElementsInProperties(){
+        lblPersonName = (TextView) findViewById(R.id.lblPersonName);
+        lblTitle = (TextView) findViewById(R.id.lblTitle);
+        lblAddress = (TextView) findViewById(R.id.lblAddress);
+        lblIntervalPoints = (TextView) findViewById(R.id.lblIntervalPoints);
+    }
+
+    public void updateLabelsBasedOnUser(){
+        final String helpObjectId = getIntent().getExtras().getString("objectId");
+        final Help help = Help.getHelp(helpObjectId);
+        //final User user = help.getUserTarget();
+
+        //lblPersonName.setText(user.getFirstName());
     }
 
     public void onChangeActions(){

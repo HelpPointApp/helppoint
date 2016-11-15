@@ -10,118 +10,134 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar_component"/>
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:background="@color/colorBackground">
-
-        <RelativeLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="155dp">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/banner_bg"
-                android:scaleType="centerCrop"/>
-
-            <TextView
-                android:id="@+id/lblPersonResume"
-                android:text="Nome da pessoa, 22"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:textColor="@color/textColorOnDark"
-                android:textSize="@dimen/banner_name_text_size"/>
-
-        </RelativeLayout>
-
-        <TextView
-            android:text="Detalhes da solicitação"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAllCaps="true"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:textColor="@color/colorPrimary"/>
+        android:layout_below="@+id/toolbar">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/activity_horizontal_margin"
-            android:background="@color/colorCardBackground"
-            android:layout_marginBottom="@dimen/activity_vertical_margin">
+            android:orientation="vertical" >
 
-            <TextView
-                android:text="Oi herói! Você poderia ajudar a Juliana a subir as escadas?"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/lblTitle"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:textSize="@dimen/h3_text_size"/>
-
-            <RelativeLayout
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="10dp">
+                android:background="@color/colorBackground">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_gray_address"
-                    android:id="@+id/icon_address"
-                    android:layout_marginRight="10dp"/>
+                <RelativeLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="155dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/banner_bg"
+                        android:scaleType="centerCrop"/>
+
+                    <TextView
+                        android:id="@+id/lblPersonName"
+                        android:text="Nome da pessoa, 22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:textColor="@color/textColorOnDark"
+                        android:textSize="@dimen/banner_name_text_size"/>
+
+                </RelativeLayout>
 
                 <TextView
-                    android:text="Av. Mem de Sá, 1527B - Santa Efigênia"
-                    android:layout_width="wrap_content"
+                    android:text="Detalhes da solicitação"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/label_address"
-                    android:layout_toEndOf="@+id/icon_address" />
-            </RelativeLayout>
+                    android:textAllCaps="true"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:textColor="@color/colorPrimary"/>
 
-            <RelativeLayout
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:background="@color/colorCardBackground"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                    <TextView
+                        android:id="@+id/lblTitle"
+                        android:text="Oi herói! Você poderia ajudar a Juliana a subir as escadas?"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:textSize="@dimen/h3_text_size"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="10dp">
+
+                        <ImageView
+                            android:layout_width="@dimen/content_icon_size"
+                            android:layout_height="@dimen/content_icon_size"
+                            app:srcCompat="@drawable/ic_gray_address"
+                            android:id="@+id/imgAddress"
+                            android:layout_marginEnd="10dp"
+                            android:layout_centerVertical="true"/>
+
+                        <TextView
+                            android:text="Av. Mem de Sá, 1527B - Santa Efigênia"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lblAddress"
+                            android:layout_toEndOf="@+id/imgAddress"
+                            android:textSize="@dimen/content_text_size"
+                            android:layout_centerVertical="true"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:layout_width="@dimen/content_icon_size"
+                            android:layout_height="@dimen/content_icon_size"
+                            app:srcCompat="@drawable/ic_gray_diamond"
+                            android:id="@+id/imgIntervalPoints"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"/>
+
+                        <TextView
+                            android:text="De 150 a 600"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lblIntervalPoints"
+                            android:layout_centerVertical="true"
+                            android:textSize="@dimen/content_text_size"
+                            android:layout_toEndOf="@id/imgIntervalPoints"/>
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnHelped"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_gray_diamond"
-                    android:id="@+id/icon_points_interval"
-                    android:paddingTop="2dp"
-                    android:layout_marginRight="10dp"/>
-
-                <TextView
-                    android:text="De 150 a 600"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/label_points_interval"
-                    android:layout_toEndOf="@id/icon_points_interval"/>
-            </RelativeLayout>
-
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/textColorOnDark"
+                android:text="Ser herói da ..."
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_alignParentBottom="true"/>
         </LinearLayout>
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btnHelped"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/textColorOnDark"
-        android:text="Ser herói da Juliana"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_alignParentBottom="true"/>
+    </ScrollView>
 
 </RelativeLayout>

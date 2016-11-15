@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.media.tv.TvContract;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -121,7 +120,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onResume();
 
         if(this.googleMap != null) {
-            updateHelpMarkers();
+            refreshMarkers();
         }
     }
 
@@ -132,7 +131,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         configureGPS();
         configureMap();
         focusOnCurrentUserPosition();
-        updateHelpMarkers();
+        refreshMarkers();
         setGoogleMapEvents();
     }
 
@@ -152,7 +151,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-                updateHelpMarkers();
+                refreshMarkers();
             }
         });
     }
@@ -237,13 +236,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return null;
     }
 
-    private void updateHelpMarkers(){
+    private void refreshMarkers(){
         double latitude = this._lat;
         double longitude = this._long;
         int zoom = (int) googleMap.getCameraPosition().zoom;
 
         googleMap.clear();
-        Help.GetHelpOutOfCloseness(latitude, longitude, zoom, new FindCallback<Help>() {
+        Help.getHelpOutOfCloseness(latitude, longitude, zoom, new FindCallback<Help>() {
             @Override
             public void done(List<Help> objects, ParseException e) {
                 helps = objects;
@@ -310,7 +309,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         public void done(ParseException e) {
                             progressDialog.dismiss();
                             onChangeStatus(Status.Idle);
-                            updateHelpMarkers();
+                            refreshMarkers();
                         }
                     });
                     if (handleRequestHelp != null){
