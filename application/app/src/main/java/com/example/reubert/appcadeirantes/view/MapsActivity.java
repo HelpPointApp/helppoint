@@ -60,7 +60,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         btnRequestHelp = (Button) findViewById(R.id.btnRequestHelp);
-        TextView lblMyPoints = (TextView) findViewById(R.id.lblPoints);
+        TextView lblMyPoints = (TextView) findViewById(R.id.label_my_points);
 
         configureAppBar();
         configureTransparencyOnStatusBar();
