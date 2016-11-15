@@ -4,11 +4,12 @@ import android.content.Intent;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.example.reubert.appcadeirantes.R;
 import com.example.reubert.appcadeirantes.manager.GPSManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,11 +25,9 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
-
 import java.util.List;
 
-
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap googleMap;
     private GPSManager gpsManager;
@@ -42,6 +41,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        configureAppBar();
+
 
         TextView pointsValue = (TextView) findViewById(R.id.lblPoints);
 
@@ -123,6 +124,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         configureMap();
         focusOnCurrentUserPosition();
         updateHelpMarkers();
+    }
+
+    private void configureAppBar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     private void configureGPS(){

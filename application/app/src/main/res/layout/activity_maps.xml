@@ -1,21 +1,13 @@
-<!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.reubert.appcadeirantes.view.MapsActivity" />
-    -->
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/viewRelativeLayout"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:theme="@style/Theme.AppCompat">
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_component"/>
 
     <fragment
         android:layout_width="match_parent"
@@ -23,40 +15,7 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         tools:context="com.example.reubert.appcadeirantes.view.MapsActivity"
-        android:theme="@style/Theme.AppCompat"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/viewTopbar" />
-
-
-    <RelativeLayout
-        android:background="@color/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:id="@+id/viewTopbar"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingEnd="@dimen/activity_horizontal_margin">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_diamond"
-            android:id="@+id/imgPointsIcon"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-        <TextView
-            android:text="0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/lblPoints"
-            android:textColor="@color/lightText"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/imgPointsIcon"
-            android:layout_toStartOf="@+id/imgPointsIcon"
-            android:layout_marginRight="5dp"/>
-
-    </RelativeLayout>
+        android:layout_alignParentBottom="true" />
 
     <Button
         android:layout_width="wrap_content"
