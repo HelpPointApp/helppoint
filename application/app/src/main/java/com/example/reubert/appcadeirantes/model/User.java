@@ -6,6 +6,12 @@ import com.parse.ParseUser;
 
 @ParseClassName("User")
 public class User extends ParseUser{
+    public enum STATUS{
+        Idle,
+        RequestingHelp,
+        HelpInProgress,
+    }
+
     public void setName (String name){
         put("name", name);
     }
@@ -20,14 +26,6 @@ public class User extends ParseUser{
 
     public String getBirthday(){
         return getString("birthday");
-    }
-
-    public void setAge(int age){
-        put("age", age);
-    }
-
-    public int getAge(){
-        return getInt("age");
     }
 
     public void setPoints(int points){
@@ -61,11 +59,5 @@ public class User extends ParseUser{
 
     public STATUS getStatus(){
         return (STATUS) get("status");
-    }
-
-    public enum STATUS{
-        Hidden,
-        RequestingHelp,
-        HelpInProgress,
     }
 }

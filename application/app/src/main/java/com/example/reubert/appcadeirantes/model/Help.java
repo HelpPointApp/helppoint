@@ -3,7 +3,6 @@ package com.example.reubert.appcadeirantes.model;
 import android.util.Log;
 
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
@@ -11,8 +10,6 @@ import com.parse.ParseClassName;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
-import java.util.List;
 
 
 /*  Example
@@ -25,6 +22,18 @@ import java.util.List;
 
 @ParseClassName("Help")
 public class Help extends ParseObject{
+
+    public enum TYPE {
+        CarryBag,
+        ClimbLadder,
+    }
+
+    public enum STATUS {
+        Requesting,
+        Helping,
+        Finished,
+        Canceled,
+    }
 
     public ParseUser getUserTarget(){
         return (ParseUser) get("userTarget");
@@ -78,17 +87,21 @@ public class Help extends ParseObject{
     public void sendAvaliation(int stars, SaveCallback saveCallback){
         Avaliation avaliation = new Avaliation();
         avaliation.setHelp(this);
-        avaliation.setStars(stars);
+        avaliation.setRating(stars);
         avaliation.setUserHelp(this.getUserHelp());
         avaliation.saveInBackground(saveCallback);
+    }
+
+    public void cancel(){
+        this.setStatus(STATUS.Canceled);
     }
 
     public void finish(SaveCallback saveCallback){
         ParseUser userHelp = this.getUserHelp();
         ParseUser userTarget = this.getUserTarget();
 
-        userTarget.put("status", User.STATUS.Hidden.ordinal());
-        userHelp.put("status", User.STATUS.Hidden.ordinal());
+        userTarget.put("status", User.STATUS.Idle.ordinal());
+        userHelp.put("status", User.STATUS.Idle.ordinal());
 
         this.setStatus(STATUS.Finished);
         this.saveInBackground(saveCallback);
@@ -115,12 +128,12 @@ public class Help extends ParseObject{
         ParseGeoPoint userLocation = new ParseGeoPoint(latitude, longitude);
         ParseQuery<Help> query = ParseQuery.getQuery("Help");
         ParseQuery<Help> helps = query.whereWithinKilometers(
-                "location", userLocation, (zoom > 17 ? zoom - 17 : 1) * 2);
+                "location", userLocation, (zoom < 17 ? (17 - zoom) * 10 : 1) * 2);
         helps = helps.whereEqualTo("status", STATUS.Requesting.ordinal());
         helps.findInBackground(callback);
     }
 
-    public static void createHelp(ParseUser user,
+    public static Help createHelp(ParseUser user,
                                   int type,
                                   String description,
                                   double latitude,
@@ -133,8 +146,9 @@ public class Help extends ParseObject{
         help.setStatus(STATUS.Requesting);
         help.setLocation(latitude, longitude);
         help.saveInBackground(saveCallback);
-
         user.put("status", User.STATUS.RequestingHelp.ordinal());
+        user.saveInBackground();
+        return help;
     }
 
     public static void getHelpByUserHelper(ParseUser user, FindCallback<Help> callback){
@@ -160,11 +174,11 @@ public class Help extends ParseObject{
             help.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
-                    callback.requestHelped(help);
                     user.put("status", User.STATUS.HelpInProgress.ordinal());
                     user.saveInBackground();
                     userTarget.put("status", User.STATUS.HelpInProgress.ordinal());
                     userTarget.saveInBackground();
+                    callback.requestHelped(help);
                 }
             });
         }else{
@@ -172,15 +186,11 @@ public class Help extends ParseObject{
         }
     }
 
-    public enum TYPE {
-        CarryBag,
-        ClimbLadder,
-    }
-
-    public enum STATUS {
-        Requesting,
-        Helping,
-        Finished,
+    public static void getRequestHelpByUser(ParseUser user, FindCallback<Help> callback){
+        ParseQuery<Help> helpQuery = ParseQuery.getQuery("Help");
+        helpQuery.whereEqualTo("status", STATUS.Requesting.ordinal());
+        helpQuery.whereEqualTo("userTarget", user);
+        helpQuery.findInBackground(callback);
     }
 
     public static class RequestHelpedCallback{
