@@ -141,7 +141,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onMarkerClick(Marker marker) {
                 LatLng location = marker.getPosition();
                 Help help = getHelpByMarkerLocation(location.latitude, location.longitude);
-/*                if (!help.getUserTarget().getObjectId().equals(user.getObjectId()))*/
+/*                if (!help.getParseUserTarget().getObjectId().equals(user.getObjectId()))*/
                 startActivityHelp(help.getObjectId());
 //                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 17));
                 return true;
