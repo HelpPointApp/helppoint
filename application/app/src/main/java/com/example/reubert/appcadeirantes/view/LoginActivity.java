@@ -11,55 +11,54 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.reubert.appcadeirantes.R;
-import com.example.reubert.appcadeirantes.model.Avaliation;
-import com.example.reubert.appcadeirantes.model.Help;
+import com.example.reubert.appcadeirantes.manager.ServerManager;
 import com.example.reubert.appcadeirantes.model.User;
 import com.example.reubert.appcadeirantes.utilities.LayoutManager;
 import com.parse.LogInCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public EditText edtEmail;
-    public EditText edtPassword;
-    public TextView lblSignUp;
-    public Button btnLogin;
+    private EditText edtEmail;
+    private EditText edtPassword;
+    private TextView lblSignUp;
+    private Button btnLogin;
+
+    private ServerManager serverManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ParseObject.registerSubclass(Help.class);
-        ParseObject.registerSubclass(User.class);
-        ParseObject.registerSubclass(Avaliation.class);
-
-        Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
-                .applicationId("Lw7z2ythkSBQRww4bn9Rb5Zb15Ss202TYgrcfFdE")
-                .clientKey("fNt452wjdnk0sxbrA5SixH8DhFNJLCU0BggEiYAO")
-                .server("https://parseapi.back4app.com").build()
-        );
-
-        ParseUser user = User.getCurrentUser();
-
-        if (user != null) {
-            Intent mapsActivity = new Intent(LoginActivity.this, MapsActivity.class);
-            mapsActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(mapsActivity);
+        if(isUserAlreadyLogged()){
+            startMapsActivity();
             finish();
         }
 
         setContentView(R.layout.activity_login);
-
+        loadAllServices();
         loadAllViewElements();
         normalizePasswordAppearance();
         createClickListeners();
     }
 
+    private boolean isUserAlreadyLogged(){
+        ParseUser user = User.getCurrentUser();
+        return user != null;
+    }
 
-    public void loadAllViewElements(){
+    private void startMapsActivity(){
+        Intent mapsActivity = new Intent(LoginActivity.this, MapsActivity.class);
+        mapsActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(mapsActivity);
+    }
+
+    private void loadAllServices(){
+        serverManager = ServerManager.getInstance();
+    }
+
+    private void loadAllViewElements(){
         this.lblSignUp   = (TextView) findViewById(R.id.lblSignUp);
         this.btnLogin    = (Button) findViewById(R.id.btnLogin);
         this.edtEmail    = (EditText) findViewById(R.id.edtEmail);
@@ -67,17 +66,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void normalizePasswordAppearance(){
+    private void normalizePasswordAppearance(){
         LayoutManager.normalizePasswordAppearance(edtPassword);
     }
 
 
-    public void createClickListeners(){
+    private void createClickListeners(){
         lblSignUp.setOnClickListener(new SignUpLabelHandler());
         btnLogin.setOnClickListener(new SignInButtonHandler());
     }
 
-    public class SignInButtonHandler implements View.OnClickListener {
+    private class SignInButtonHandler implements View.OnClickListener {
         @Override
         public void onClick(View clickedView){
             final View view = clickedView;
@@ -112,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public class SignUpLabelHandler implements View.OnClickListener {
+    private class SignUpLabelHandler implements View.OnClickListener {
         @Override
         public void onClick(View clickedView){
             loadUserRegisterScreen();
