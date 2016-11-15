@@ -3,7 +3,8 @@
 
     <!-- General texts -->
     <string name="password">Senha</string>
-    <string name="username">Usuário</string>
+    <string name="firstName">Nome</string>
+    <string name="lastName">Sobrenome</string>
     <string name="email">E-mail</string>
     <string name="repeatPassword">Repita a senha</string>
     <string name="cpf">CPF</string>

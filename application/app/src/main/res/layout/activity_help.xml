@@ -110,16 +110,18 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btnHelped"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/textColorOnDark"
-            android:text="Ser herói da Juliana"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnHelped"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/textColorOnDark"
+        android:text="Ser herói da Juliana"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

@@ -14,6 +14,7 @@ import com.example.reubert.appcadeirantes.R;
 import com.example.reubert.appcadeirantes.model.Avaliation;
 import com.example.reubert.appcadeirantes.model.Help;
 import com.example.reubert.appcadeirantes.model.User;
+import com.example.reubert.appcadeirantes.utilities.LayoutManager;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -53,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         loadAllViewElements();
+        normalizePasswordAppearance();
         createClickListeners();
     }
 
@@ -62,6 +64,11 @@ public class LoginActivity extends AppCompatActivity {
         this.btnLogin    = (Button) findViewById(R.id.btnLogin);
         this.edtEmail    = (EditText) findViewById(R.id.edtEmail);
         this.edtPassword = (EditText) findViewById(R.id.edtPassword);
+    }
+
+
+    public void normalizePasswordAppearance(){
+        LayoutManager.normalizePasswordAppearance(edtPassword);
     }
 
 
