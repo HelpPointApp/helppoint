@@ -61,17 +61,7 @@ public class HelpActivity extends AppCompatActivity {
         lblIntervalPoints = (TextView) findViewById(R.id.lblIntervalPoints);
     }
 
-    public void updateLabelsBasedOnUser(){
-        String helpObjectId = getIntent().getExtras().getString("objectId");
-        Help help = Help.getHelp(helpObjectId);
-        final ParseUser user = help.getUserTarget();
-        user.fetchIfNeededInBackground(new GetCallback<ParseUser>() {
-            @Override
-            public void done(ParseUser object, ParseException e) {
-                lblPersonName.setText(user.getString("firstName"));
-            }
-        });
-    }
+    public void updateLabelsBasedOnUser(){}
 
     public void onChangeActions(){
         final Button buttonHelp = (Button) findViewById(R.id.btnHelped);
@@ -103,7 +93,7 @@ public class HelpActivity extends AppCompatActivity {
                 }
             });
         }else{
-            if(isEqualUser(help.getUserTarget(), user)) {
+            if(isEqualUser(help.getParseUserTarget(), user)) {
                 buttonHelp.setText("Finalizar");
                 buttonHelp.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -134,7 +124,7 @@ public class HelpActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        if (!((isEqualUser(help.getUserHelp(), this.user) || isEqualUser(help.getUserTarget(), this.user))
+        if (!((isEqualUser(help.getUserHelp(), this.user) || isEqualUser(help.getParseUserTarget(), this.user))
                 && help.getStatus() == Help.STATUS.Helping)) {
             super.onBackPressed();
         }
