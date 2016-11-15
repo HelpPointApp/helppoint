@@ -15,6 +15,14 @@
         android:background="@color/colorPrimary"
         android:paddingLeft="@dimen/activity_horizontal_margin">
 
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            app:srcCompat="@drawable/back_symbol"
+            android:id="@+id/btnBack"
+            android:clickable="true"
+            android:layout_gravity="center_vertical"/>
+
     </LinearLayout>
 
     <RelativeLayout
@@ -26,45 +34,67 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edtEmail"
+            android:inputType="textEmailAddress"
+            android:hint="@string/email"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/textColorOnLight"
+            android:textColor="@color/textColorOnLight"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:id="@+id/edtPassword"
+            android:hint="@string/password"
+            android:layout_below="@+id/edtEmail"
+            android:backgroundTint="@color/textColorOnLight"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/textColorOnLight"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:id="@+id/edtPasswordAgain"
+            android:hint="@string/repeatPassword"
+            android:layout_below="@+id/edtPassword"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="@color/textColorOnLight"
+            android:textColor="@color/textColorOnLight"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edtCPF"
+            android:hint="@string/cpf"
+            android:layout_below="@+id/edtPasswordAgain"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="@color/textColorOnLight"
+            android:textColor="@color/textColorOnLight"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:id="@+id/edtBirthday"
+            android:hint="@string/dateBirthday"
+            android:layout_below="@+id/edtCPF"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="@color/textColorOnLight"
+            android:textColor="@color/textColorOnLight"/>
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enviar Avaliação"
-            android:id="@+id/btnSendAvaliation"
+            android:text="@string/create_account"
+            android:id="@+id/btnCreateAccount"
+            android:layout_alignParentBottom="true"
             android:background="@color/colorPrimary"
-            android:textColor="@color/lightText"
-            android:layout_below="@+id/rtbRatingHelp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="69dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Como você avalia a ajuda do(a) fulano?"
-            android:id="@+id/lblFirstMsg"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Sua avaliação é crucial para que fulano receba uma pontuação justa pela ajuda."
-            android:id="@+id/lblSecondMsg"
-            android:layout_below="@+id/lblFirstMsg"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <RatingBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/rtbRatingHelp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:background="#ffffff" />
+            android:textColor="@color/lightText"/>
 
     </RelativeLayout>
 
