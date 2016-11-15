@@ -2,7 +2,6 @@ package com.example.reubert.appcadeirantes.view;
 
 import android.content.Intent;
 import android.location.Location;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +15,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -28,6 +28,8 @@ import com.parse.ParseUser;
 import java.util.List;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    private TextView lblMyPoints;
 
     private GoogleMap googleMap;
     private GPSManager gpsManager;
@@ -42,15 +44,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         configureAppBar();
-
-
-        TextView pointsValue = (TextView) findViewById(R.id.lblPoints);
+        configureTransparencyOnStatusBar();
+        loadAllViewElements();
 
         try{
             this.user = User.getCurrentUser();
             this.user.fetchIfNeeded();
             int status = this.user.getInt("status");
-            pointsValue.setText(String.valueOf(this.user.getInt("points")));
+            lblMyPoints.setText(String.valueOf(this.user.getInt("points")));
 
             if (User.STATUS.values()[status] != User.STATUS.Hidden){
                 Help.getHelpByUserHelper(this.user, new FindCallback<Help>() {
@@ -131,6 +132,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setSupportActionBar(toolbar);
     }
 
+    private void configureTransparencyOnStatusBar(){
+        //LayoutManager.enableTransparentStatusBar(this, (Toolbar) findViewById(R.id.toolbar));
+    }
+
+    private void loadAllViewElements(){
+        lblMyPoints = (TextView) findViewById(R.id.label_my_points);
+    }
+
     private void configureGPS(){
         gpsManager = GPSManager.getInstance(this);
         gpsManager.enableLocation();
@@ -169,6 +178,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     ParseGeoPoint point = help.getLocation();
                     MarkerOptions marker = new MarkerOptions();
                     marker.position(new LatLng(point.getLatitude(), point.getLongitude()));
+                    marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
                     googleMap.addMarker(marker);
                 }
             }

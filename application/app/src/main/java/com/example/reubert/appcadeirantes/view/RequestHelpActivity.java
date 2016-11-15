@@ -45,7 +45,7 @@ public class RequestHelpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressDialog.show();
-                EditText description = (EditText) findViewById(R.id.description);
+                EditText description = (EditText) findViewById(R.id.edtObservation);
                 Location loc = GPSManager.getInstance(getBaseContext()).getUserLocation();
                 int typeHelp = spinner.getSelectedItemPosition();
 
