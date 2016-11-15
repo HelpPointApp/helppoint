@@ -28,7 +28,7 @@ public class Help extends ParseObject{
     }
 
     public ParseUser getHelpedParseUser(){
-        return (ParseUser) get("userTarget");
+        return (ParseUser) get("helpedUser");
     }
 
     public void setHelpedParseUser(ParseUser user){
@@ -36,7 +36,7 @@ public class Help extends ParseObject{
     }
 
     public ParseUser getHelperParseUser(){
-        return (ParseUser) get("helpedUser");
+        return (ParseUser) get("helperUser");
     }
 
     public void setHelperParseUser(ParseUser user){
