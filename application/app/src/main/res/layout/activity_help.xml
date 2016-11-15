@@ -1,98 +1,81 @@
-<!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.reubert.appcadeirantes.view.MapsActivity" />
-    -->
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/viewRelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:theme="@style/Theme.AppCompat">
+    android:orientation="vertical">
 
-    <RelativeLayout
-        android:background="@color/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:id="@+id/relativeLayout"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-        <TextView
-            android:text="Meus pontos: "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/myPointsLabel"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="17dp"
-            android:layout_marginStart="17dp"
-            android:textColor="@color/lightText"/>
-
-        <TextView
-            android:text="0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/lblPoints"
-            android:layout_alignBaseline="@+id/myPointsLabel"
-            android:layout_alignBottom="@+id/myPointsLabel"
-            android:layout_toRightOf="@+id/myPointsLabel"
-            android:layout_toEndOf="@+id/myPointsLabel"
-            android:textColor="@color/lightText" />
-    </RelativeLayout>
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_component"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/relativeLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-        <View
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@color/colorBackground">
+
+        <RelativeLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_below="@+id/relativeLayout"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="@android:color/black"
-            android:alpha="0.5"
-            android:clickable="false"
-            android:contextClickable="false" />
+            android:layout_height="155dp">
 
-        <View
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/banner_bg"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:id="@+id/lblPersonResume"
+                android:text="Nome da pessoa, 22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:textColor="@color/textColorOnDark"
+                android:textSize="@dimen/banner_name_text_size"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:text="Detalhes da solicitação"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/relativeLayout"
-            android:layout_alignParentTop="true"
-            android:background="#cccccc">
-        </View>
+            android:layout_height="wrap_content"
+            android:textAllCaps="true"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:textColor="@color/colorPrimary"/>
 
-    </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:background="@color/colorCardBackground"
+            android:layout_marginBottom="@dimen/activity_vertical_margin">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/view">
+            <TextView
+                android:text="Oi herói! Você poderia ajudar a Juliana a subir as escadas?"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblTitle" />
+        </LinearLayout>
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Ajudar"
             android:id="@+id/btnHelped"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:textColor="@color/lightText"
-            android:layout_marginLeft="80dp"
-            android:layout_marginRight="80dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="10dp" />
+            android:textColor="@color/textColorOnDark"
+            android:text="Ser herói da Juliana"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>
