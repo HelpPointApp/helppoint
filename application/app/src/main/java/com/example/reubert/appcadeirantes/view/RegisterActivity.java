@@ -82,6 +82,7 @@ public class RegisterActivity extends AppCompatActivity {
             user.setPassword(edtPassword.getText().toString());
             user.setCPF(edtCPF.getText().toString());
             user.setBirthday(edtBirthday.getText().toString());
+            user.setStatus(User.STATUS.Idle);
             user.setPoints(0);
 
             user.signUpInBackground(new SignUpCallback() {

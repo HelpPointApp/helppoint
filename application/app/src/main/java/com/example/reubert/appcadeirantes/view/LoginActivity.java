@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.reubert.appcadeirantes.R;
+import com.example.reubert.appcadeirantes.model.Avaliation;
 import com.example.reubert.appcadeirantes.model.Help;
 import com.example.reubert.appcadeirantes.model.User;
 import com.parse.LogInCallback;
@@ -32,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
 
         ParseObject.registerSubclass(Help.class);
         ParseObject.registerSubclass(User.class);
+        ParseObject.registerSubclass(Avaliation.class);
 
         Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
                 .applicationId("Lw7z2ythkSBQRww4bn9Rb5Zb15Ss202TYgrcfFdE")

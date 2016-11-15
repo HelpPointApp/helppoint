@@ -1,5 +1,6 @@
 package com.example.reubert.appcadeirantes.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
@@ -30,10 +31,21 @@ import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    private enum Status{
+        Idle,
+        Requesting,
+    }
+
     private GoogleMap googleMap;
     private GPSManager gpsManager;
     private ParseUser user;
     private List<Help> helps;
+    private Intent requestHelpIntent;
+    private Status status;
+    private Help helpRequesting;
+    private String helpTargetObjectId;
+    private Button btnRequestHelp;
+    private HandleRequestingHelp handleRequestHelp;
 
     private double _lat;
     private double _long;
@@ -44,14 +56,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         TextView pointsValue = (TextView) findViewById(R.id.lblPoints);
+        btnRequestHelp = (Button) findViewById(R.id.btnRequestHelp);
 
         try{
             this.user = User.getCurrentUser();
             this.user.fetchIfNeeded();
             int status = this.user.getInt("status");
             pointsValue.setText(String.valueOf(this.user.getInt("points")));
+            User.STATUS currentStatus = User.STATUS.values()[status];
 
-            if (User.STATUS.values()[status] != User.STATUS.Hidden){
+            if (currentStatus == User.STATUS.HelpInProgress){
                 Help.getHelpByUserHelper(this.user, new FindCallback<Help>() {
                     @Override
                     public void done(List<Help> objects, ParseException e) {
@@ -69,6 +83,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                     }
                 });
+            }else if (currentStatus == User.STATUS.RequestingHelp){
+                Help.getRequestHelpByUser(user, new FindCallback<Help>() {
+                    @Override
+                    public void done(List<Help> objects, ParseException e) {
+                        if (e != null){
+                            if(objects.size() > 0){
+                                Help _help = objects.get(0);
+                                helpRequesting = _help;
+                                helpTargetObjectId = _help.getObjectId();
+                                onChangeStatus(Status.Requesting);
+                            }
+                        }
+                    }
+                });
             }
         }catch(Exception e){
             Log.e("pointerror", e.toString());
@@ -76,15 +104,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        Button btnRequestHelp = (Button) findViewById(R.id.btnRequestHelp);
-        btnRequestHelp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent helpActivity = new Intent(MapsActivity.this, RequestHelpActivity.class);
-                startActivity(helpActivity);
-            }
-        });
+        if (status == null)
+            this.onChangeStatus(Status.Idle);
     }
 
     @Override
@@ -100,29 +121,70 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap _googleMap) {
         this.googleMap = _googleMap;
 
+        configureGPS();
+        configureMap();
+        focusOnCurrentUserPosition();
+        updateHelpMarkers();
+        setGoogleMapEvents();
+    }
+
+    private void setGoogleMapEvents(){
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 LatLng location = marker.getPosition();
                 Help help = getHelpByMarkerLocation(location.latitude, location.longitude);
-                ParseUser userTarget = help.getUserTarget();
-                try {
-                    userTarget.fetchIfNeeded();
-                    Intent helpActivity = new Intent(MapsActivity.this, HelpActivity.class);
-                    helpActivity.putExtra("objectId", help.getObjectId());
-                    startActivity(helpActivity);
-                }catch (Exception e) {
-                    Log.e("markerclick", e.toString());
-                }
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 17));
+                startActivityHelp(help.getObjectId());
+//                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 17));
                 return true;
             }
         });
 
-        configureGPS();
-        configureMap();
-        focusOnCurrentUserPosition();
-        updateHelpMarkers();
+        googleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                updateHelpMarkers();
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                try {
+                    Help help = Help.getHelp(data.getExtras().getString("objectId"));
+                    helpTargetObjectId = help.getObjectId();
+                    handleRequestHelp = new HandleRequestingHelp();
+                    handleRequestHelp.start();
+                    this.onChangeStatus(Status.Requesting);
+                } catch (Exception e) {
+                    Log.e("error activity result", e.toString());
+                }
+            }
+        }else if (requestCode == 2){
+            if (resultCode == Activity.RESULT_OK){
+                this.onChangeStatus(Status.Idle);
+            }
+        }
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        if(handleRequestHelp != null && handleRequestHelp.isAlive()){
+            handleRequestHelp.isInterrupted();
+        }
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        if (handleRequestHelp != null && handleRequestHelp.isAlive()){
+            handleRequestHelp.isInterrupted();
+        }
     }
 
     private void configureGPS(){
@@ -186,6 +248,66 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         this._lat = latitude;
         this._long = longitude;
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 17));
+        googleMap.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 17));
+    }
+
+    private void onChangeStatus(Status status){
+        if (status == Status.Idle){
+            btnRequestHelp.setText("PEDIR AJUDA");
+            btnRequestHelp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    requestHelpIntent = new Intent(MapsActivity.this, RequestHelpActivity.class);
+                    startActivityForResult(requestHelpIntent, 1);
+                }
+            });
+        }
+        if (status == Status.Requesting){
+            btnRequestHelp.setText("CANCELAR");
+            btnRequestHelp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    helpRequesting.cancel();
+                    if (handleRequestHelp != null){
+                        handleRequestHelp.interrupt();
+                    }
+                }
+            });
+        }
+        this.status = status;
+    }
+
+    private void startActivityHelp(String objectId){
+        Intent helpActivity = new Intent(MapsActivity.this, HelpActivity.class);
+        helpActivity.putExtra("objectId", objectId);
+        startActivityForResult(helpActivity, 2);
+    }
+
+    private class HandleRequestingHelp extends Thread{
+        @Override
+        public void run(){
+            boolean running = true;
+            while(running){
+                try {
+                    Help help = Help.getHelp(helpTargetObjectId);
+                    Help.STATUS status = help.getStatus();
+
+                    if (status == Help.STATUS.Helping){
+                        running = false;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivityHelp(helpTargetObjectId);
+                            }
+                        });
+                    }
+
+                    Thread.sleep(1000);
+                }catch(Exception e){
+                    Log.e("error request helo", e.toString());
+                }
+            }
+        }
     }
 }

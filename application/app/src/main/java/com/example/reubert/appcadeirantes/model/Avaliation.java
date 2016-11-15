@@ -23,11 +23,11 @@ public class Avaliation extends ParseObject {
         return (Help) get("help");
     }
 
-    public void setStars(int stars){
+    public void setRating(int stars){
         put("stars", stars);
     }
 
-    public int getStars(){
+    public int getRating(){
         return getInt("stars");
     }
 

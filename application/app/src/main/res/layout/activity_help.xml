@@ -70,8 +70,7 @@
             android:layout_height="50dp"
             android:layout_below="@+id/relativeLayout"
             android:layout_alignParentTop="true"
-            android:background="#cccccc">
-        </View>
+            android:background="#cccccc" />
 
     </LinearLayout>
 

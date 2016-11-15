@@ -1,6 +1,8 @@
 package com.example.reubert.appcadeirantes.view;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.location.Location;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +24,9 @@ import com.parse.SaveCallback;
 
 public class RequestHelpActivity extends AppCompatActivity {
 
+    private Help creatingHelp;
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +39,7 @@ public class RequestHelpActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
 
         final ParseUser user = User.getCurrentUser();
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Ajuda");
         progressDialog.setMessage("Aguarde enquanto enviamos sua solicitação.");
 
@@ -48,22 +52,27 @@ public class RequestHelpActivity extends AppCompatActivity {
                 Location loc = GPSManager.getInstance(getBaseContext()).getUserLocation();
                 int typeHelp = spinner.getSelectedItemPosition();
 
-                Help.createHelp(
+                creatingHelp = Help.createHelp(
                         user, typeHelp, description.getText().toString(),
-                        loc.getLatitude(), loc.getLongitude(), new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        progressDialog.dismiss();
-
-                        if(e == null){
-                            finish();
-                        }else{
-                            Log.e("createhelp", e.toString());
-                            builder.show();
-                        }
-                    }
-                });
+                        loc.getLatitude(), loc.getLongitude(), new SaveHelp());
             }
         });
     }
+
+    private class SaveHelp implements SaveCallback {
+        @Override
+        public void done(ParseException e) {
+            progressDialog.dismiss();
+
+            if(e == null){
+                Intent intentData = new Intent();
+                intentData.putExtra("objectId", creatingHelp.getObjectId());
+                setResult(Activity.RESULT_OK, intentData);
+                finish();
+            }else{
+                Log.e("createhelp", e.toString());
+            }
+        }
+    }
+
 }
