@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/viewRelativeLayout"
     android:layout_width="match_parent"
@@ -63,13 +64,49 @@
                 android:text="Oi herói! Você poderia ajudar a Juliana a subir as escadas?"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/lblTitle" />
+                android:id="@+id/lblTitle"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:textSize="@dimen/h3_text_size"/>
 
-            <FrameLayout
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_gray_address"
+                    android:id="@+id/icon_address"
+                    android:layout_marginRight="10dp"/>
+
+                <TextView
+                    android:text="Av. Mem de Sá, 1527B - Santa Efigênia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/label_address"
+                    android:layout_toEndOf="@+id/icon_address" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            </FrameLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_gray_diamond"
+                    android:id="@+id/icon_points_interval"
+                    android:paddingTop="2dp"
+                    android:layout_marginRight="10dp"/>
+
+                <TextView
+                    android:text="De 150 a 600"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/label_points_interval"
+                    android:layout_toEndOf="@id/icon_points_interval"/>
+            </RelativeLayout>
 
         </LinearLayout>
 

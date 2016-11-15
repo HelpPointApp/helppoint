@@ -8,6 +8,8 @@
     <dimen name="edt_small_font">22dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
+    <dimen name="h3_text_size">16dp</dimen>
+
     <!-- Specific sizes -->
     <dimen name="header_text_size">20dp</dimen>
     <dimen name="banner_name_text_size">16dp</dimen>
