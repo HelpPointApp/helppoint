@@ -31,8 +31,8 @@ public class HelpActivity extends AppCompatActivity {
         final String objectId = getIntent().getExtras().getString("objectId");
         final Button buttonHelp = (Button) findViewById(R.id.btnHelped);
         final ProgressDialog progressDialog = new ProgressDialog(this);
-        user = User.getCurrentUser();
 
+        user = User.getCurrentUser();
         help = Help.getHelp(objectId);
 
         if (help.getUserHelp() == null) {

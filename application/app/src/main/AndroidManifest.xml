@@ -51,7 +51,8 @@
             android:name=".view.HelpActivity"
             android:label="@string/title_activity_help"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".view.RequestHelpActivity"></activity>
+        <activity android:name=".view.RequestHelpActivity" />
+        <activity android:name=".view.RatingActivity"></activity>
     </application>
 
 </manifest>
