@@ -23,24 +23,24 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         tools:context="com.example.reubert.appcadeirantes.view.MapsActivity"
-        android:layout_below="@+id/relativeLayout"
         android:theme="@style/Theme.AppCompat"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/viewTopbar" />
 
 
     <RelativeLayout
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:id="@+id/viewTopbar"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingEnd="@dimen/activity_horizontal_margin">
 
         <ImageView
-            android:layout_width="20dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_diamond"
-            android:id="@+id/imageView"
+            android:src="@drawable/ic_diamond"
+            android:id="@+id/imgPointsIcon"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
@@ -52,9 +52,10 @@
             android:id="@+id/lblPoints"
             android:textColor="@color/lightText"
             android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/imageView"
-            android:layout_toStartOf="@+id/imageView" />
+            android:layout_toLeftOf="@+id/imgPointsIcon"
+            android:layout_toStartOf="@+id/imgPointsIcon"
+            android:layout_marginRight="5dp"/>
+
     </RelativeLayout>
 
     <Button
