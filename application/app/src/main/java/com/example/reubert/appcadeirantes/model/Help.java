@@ -27,20 +27,20 @@ public class Help extends ParseObject{
         Canceled,
     }
 
-    public ParseUser getParseUserTarget(){
+    public ParseUser getHelpedParseUser(){
         return (ParseUser) get("userTarget");
     }
 
-    public void setParseUserTarget(ParseUser user){
-        put("userTarget", user);
+    public void setHelpedParseUser(ParseUser user){
+        put("helpedUser", user);
     }
 
-    public ParseUser getUserHelp(){
-        return (ParseUser) get("userHelp");
+    public ParseUser getHelperParseUser(){
+        return (ParseUser) get("helpedUser");
     }
 
-    public void setUserHelp(ParseUser user){
-        put("userHelp", user);
+    public void setHelperParseUser(ParseUser user){
+        put("helperUser", user);
     }
 
     public void setDescription(String description){
@@ -80,7 +80,7 @@ public class Help extends ParseObject{
         Avaliation avaliation = new Avaliation();
         avaliation.setHelp(this);
         avaliation.setRating(stars);
-        avaliation.setUserHelp(this.getUserHelp());
+        avaliation.setUserHelp(this.getHelperParseUser());
         avaliation.saveInBackground(saveCallback);
     }
 
@@ -90,8 +90,8 @@ public class Help extends ParseObject{
     }
 
     public void finish(SaveCallback saveCallback){
-        ParseUser userHelp = this.getUserHelp();
-        ParseUser userTarget = this.getParseUserTarget();
+        ParseUser userHelp = this.getHelperParseUser();
+        ParseUser userTarget = this.getHelpedParseUser();
 
         userTarget.put("status", User.STATUS.Idle.ordinal());
         userHelp.put("status", User.STATUS.Idle.ordinal());
@@ -140,7 +140,7 @@ public class Help extends ParseObject{
         Help help = new Help();
         help.setTypeHelp(TYPE.values()[type]);
         help.setDescription(description);
-        help.setParseUserTarget(user);
+        help.setHelpedParseUser(user);
         help.setStatus(STATUS.Requesting);
         help.setLocation(latitude, longitude);
         help.saveInBackground(saveCallback);
@@ -167,11 +167,11 @@ public class Help extends ParseObject{
             return;
         }
 
-        final ParseUser userHelp = help.getUserHelp();
-        final ParseUser userTarget = help.getParseUserTarget();
+        final ParseUser userHelp = help.getHelperParseUser();
+        final ParseUser userTarget = help.getHelpedParseUser();
 
         if (userHelp == null){
-            help.setUserHelp(user);
+            help.setHelperParseUser(user);
             help.setStatus(STATUS.Helping);
             help.saveInBackground(new SaveCallback() {
                 @Override

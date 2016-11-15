@@ -18,7 +18,6 @@ import com.example.reubert.appcadeirantes.model.User;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -44,7 +43,7 @@ public class HelpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
 
-        storeUsefulElementsInProperties();
+        loadElementsFromXML();
         updateLabelsBasedOnUser();
 
         String objectId = getIntent().getExtras().getString("objectId");
@@ -55,7 +54,7 @@ public class HelpActivity extends AppCompatActivity {
         onChangeActions();
     }
 
-    public void storeUsefulElementsInProperties(){
+    public void loadElementsFromXML(){
         lblPersonName = (TextView) findViewById(R.id.lblPersonName);
         lblTitle = (TextView) findViewById(R.id.lblTitle);
         lblAddress = (TextView) findViewById(R.id.lblAddress);
@@ -68,7 +67,7 @@ public class HelpActivity extends AppCompatActivity {
         final Button buttonHelp = (Button) findViewById(R.id.btnHelped);
         final ProgressDialog progressDialog = new ProgressDialog(this);
 
-        if (help.getUserHelp() == null) {
+        if (help.getHelperParseUser() == null) {
             buttonHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -94,7 +93,7 @@ public class HelpActivity extends AppCompatActivity {
                 }
             });
         }else{
-            if(isEqualUser(help.getParseUserTarget(), user)) {
+            if(isEqualUser(help.getHelpedParseUser(), user)) {
                 buttonHelp.setText("Finalizar");
                 buttonHelp.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -127,7 +126,7 @@ public class HelpActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        if (!((isEqualUser(help.getUserHelp(), this.user) || isEqualUser(help.getParseUserTarget(), this.user))
+        if (!((isEqualUser(help.getHelperParseUser(), this.user) || isEqualUser(help.getHelpedParseUser(), this.user))
                 && help.getStatus() == Help.STATUS.Helping)) {
             super.onBackPressed();
         }
@@ -154,7 +153,7 @@ public class HelpActivity extends AppCompatActivity {
         final Context context = this;
 
         if (handleCheckStatus == null || handleCheckStatus.isInterrupted()){
-            if (isEqualUser(help.getUserHelp(), user)){
+            if (isEqualUser(help.getHelperParseUser(), user)){
                 help.fetchInBackground(new GetCallback<Help>() {
                     @Override
                     public void done(Help object, ParseException e) {
@@ -196,7 +195,7 @@ public class HelpActivity extends AppCompatActivity {
             Help auxHelp;
             Location userLocation;
             ParseGeoPoint parseGeoPoint;
-            ParseUser parserUser = this.help.getParseUserTarget();
+            ParseUser parserUser = this.help.getHelpedParseUser();
             try {
                 parserUser.fetchIfNeeded();
 

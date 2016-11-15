@@ -21,10 +21,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.example.reubert.appcadeirantes.R;
@@ -147,7 +145,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onMarkerClick(Marker marker) {
                 LatLng location = marker.getPosition();
                 Help help = getHelpByMarkerLocation(location.latitude, location.longitude);
-/*                if (!help.getParseUserTarget().getObjectId().equals(user.getObjectId()))*/
+/*                if (!help.getHelpedParseUser().getObjectId().equals(user.getObjectId()))*/
                 startActivityHelp(help.getObjectId());
 //                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 17));
                 return true;
@@ -425,7 +423,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         @Override
         public void run(){
-            ParseUser user = help.getParseUserTarget();
+            ParseUser user = help.getHelpedParseUser();
             ParseUser userHelp;
 
             try{
