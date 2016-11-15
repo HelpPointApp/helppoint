@@ -36,6 +36,7 @@ public class RequestHelpActivity extends AppCompatActivity {
         final ParseUser user = User.getCurrentUser();
         final ProgressDialog progressDialog = new ProgressDialog(this);
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
         progressDialog.setTitle("Ajuda");
         progressDialog.setMessage("Aguarde enquanto enviamos sua solicitação.");
 

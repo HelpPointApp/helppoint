@@ -23,11 +23,12 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
         loadAllViewElements();
     }
 
     public void loadAllViewElements(){
-        txtEmail = (TextView) findViewById(R.id.txtProfileEmail);
+        txtEmail      = (TextView) findViewById(R.id.txtProfileEmail);
         txtNascimento = (TextView) findViewById(R.id.txtProfileNascimento);
         txtCpf        = (TextView) findViewById(R.id.txtProfileCpf);
         btnVoltar     = (Button) findViewById(R.id.btnProfileVoltar);
