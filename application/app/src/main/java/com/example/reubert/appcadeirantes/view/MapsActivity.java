@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
@@ -246,7 +247,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         double longitude = this._long;
         int zoom = (int) googleMap.getCameraPosition().zoom;
 
-        googleMap.clear();
+        if (status == Status.Idle) {
+            googleMap.clear();
+            requestNearHelpers(latitude, longitude, zoom);
+        }else if(status == Status.Requesting){
+            googleMap.clear();
+            requestNearUsers(latitude, longitude);
+        }
+    }
+
+    private void requestNearUsers(double latitude, double longitude){
+        User.getNearUsers(latitude, longitude, new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                if (e == null){
+                    ParseUser user;
+                    ParseGeoPoint point;
+                    MarkerOptions markerOptions;
+
+                    for (int i =0, len = objects.size(); i < len; i++){
+                        user = objects.get(i);
+                        point = (ParseGeoPoint) user.get("lastPosition");
+                        markerOptions = new MarkerOptions();
+                        markerOptions.position(new LatLng(point.getLatitude(), point.getLongitude()));
+                        googleMap.addMarker(markerOptions);
+                    }
+                }
+            }
+        });
+    }
+
+    private void requestNearHelpers(double latitude, double longitude, int zoom){
         Help.getHelpOutOfCloseness(latitude, longitude, zoom, new FindCallback<Help>() {
             @Override
             public void done(List<Help> objects, ParseException e) {
@@ -381,7 +412,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private class HandleRequestHelpPosition extends Thread{
+    private class HandleRequestHelpPosition extends Thread {
 
         private Help help;
         private Marker marker;
@@ -394,22 +425,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         @Override
         public void run(){
-            ParseUser user = help.getUserTarget();
+            ParseUser user = help.getParseUserTarget();
+            ParseUser userHelp;
 
             try{
                 while(true){
-                    ParseUser userHelp = user.fetch();
-                    ParseGeoPoint geoPoint = (ParseGeoPoint) userHelp.get("lastPosition");
+                    userHelp = user.fetch();
+                    final ParseGeoPoint geoPoint = (ParseGeoPoint) userHelp.get("lastPosition");
                     if (geoPoint != null) {
-                        marker.setPosition(new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()));
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                marker.setPosition(
+                                        new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()));
+                            }
+                        });
                     }
                     Thread.sleep(2000);
                 }
             }catch(Exception e){
                 Log.e("error request position", e.toString());
             }
-
-            marker.remove();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    marker.remove();
+                }
+            });
         }
     }
 }

@@ -17,6 +17,7 @@ import com.example.reubert.appcadeirantes.model.Help;
 import com.example.reubert.appcadeirantes.model.User;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -102,6 +103,8 @@ public class HelpActivity extends AppCompatActivity {
                         progressDialog.setMessage("Aguarde estamos finalizando.");
                         progressDialog.show();
 
+                        stopHandler();
+
                         help.finish(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
@@ -116,7 +119,7 @@ public class HelpActivity extends AppCompatActivity {
                     }
                 });
             }else{
-                startThread();
+                startHandler();
                 buttonHelp.setVisibility(View.INVISIBLE);
             }
         }
@@ -130,16 +133,25 @@ public class HelpActivity extends AppCompatActivity {
         }
     }
 
-    public void startThread(){
-        if (handleCheckStatus == null || handleCheckStatus.isInterrupted()) {
-            handleCheckStatus = new HandleCheckStatusHelp(help, this);
+    public void startHandler(){
+        if (handleCheckStatus != null && handleCheckStatus.isAlive()) {
+            handleCheckStatus.interrupt();
         }
+        handleCheckStatus = new HandleCheckStatusHelp(help, this);
         handleCheckStatus.start();
+    }
+
+    public void stopHandler(){
+        if (handleCheckStatus != null && !handleCheckStatus.isInterrupted()){
+            handleCheckStatus.interrupt();
+        }
     }
 
     @Override
     public void onResume(){
         super.onResume();
+
+        final Context context = this;
 
         if (handleCheckStatus == null || handleCheckStatus.isInterrupted()){
             if (isEqualUser(help.getUserHelp(), user)){
@@ -147,7 +159,7 @@ public class HelpActivity extends AppCompatActivity {
                     @Override
                     public void done(Help object, ParseException e) {
                         if(object.getStatus() == Help.STATUS.Helping){
-                            handleCheckStatus.start();
+                            startHandler();
                         }
                     }
                 });
@@ -158,17 +170,13 @@ public class HelpActivity extends AppCompatActivity {
     @Override
     public void onPause(){
         super.onPause();
-        if (handleCheckStatus != null && handleCheckStatus.isAlive()){
-            handleCheckStatus.interrupt();
-        }
+        stopHandler();
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        if (handleCheckStatus != null && handleCheckStatus.isAlive()){
-            handleCheckStatus.interrupt();
-        }
+        stopHandler();
     }
 
     private class HandleCheckStatusHelp extends Thread{
@@ -187,15 +195,17 @@ public class HelpActivity extends AppCompatActivity {
             boolean running = true;
             Help auxHelp;
             Location userLocation;
-            ParseUser parserUser = this.help.getUserTarget();
+            ParseGeoPoint parseGeoPoint;
+            ParseUser parserUser = this.help.getParseUserTarget();
             try {
-                User user = (User) ParseQuery.getQuery("User").get(parserUser.getObjectId());
+                parserUser.fetchIfNeeded();
 
                 while (running) {
                     auxHelp = this.help.fetch();
                     userLocation = GPSManager.getInstance(context).getUserLocation();
-                    user.setLastPosition(userLocation.getLatitude(), userLocation.getLongitude());
-                    user.saveInBackground();
+                    parseGeoPoint = new ParseGeoPoint(userLocation.getLatitude(), userLocation.getLongitude());
+                    parserUser.put("lastPosition", parseGeoPoint);
+                    parserUser.saveInBackground();
 
                     if (auxHelp.getStatus() == Help.STATUS.Finished) {
                         running = false;
