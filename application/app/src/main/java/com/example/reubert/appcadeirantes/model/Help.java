@@ -76,7 +76,7 @@ public class Help extends ParseObject{
         return STATUS.values()[getInt("status")];
     }
 
-    public void sendAvaliation(int stars, SaveCallback saveCallback){
+    public void avaliation(int stars, SaveCallback saveCallback){
         Avaliation avaliation = new Avaliation();
         avaliation.setHelp(this);
         avaliation.setRating(stars);
@@ -176,7 +176,7 @@ public class Help extends ParseObject{
             help.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
-                    if (e != null){
+                    if (e == null){
                         callback.requestHelper(help);
                         user.put("status", User.STATUS.HelpInProgress.ordinal());
                         user.saveInBackground();
