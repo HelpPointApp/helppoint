@@ -30,6 +30,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loadAllServices();
+        initializeServerManager();
 
         if(isUserAlreadyLogged()){
             startMapsActivity();
@@ -37,32 +39,43 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_login);
-        loadAllServices();
         loadAllViewElements();
         normalizePasswordAppearance();
         createClickListeners();
     }
 
-    private boolean isUserAlreadyLogged(){
-        ParseUser user = User.getCurrentUser();
-        return user != null;
-    }
-
-    private void startMapsActivity(){
-        Intent mapsActivity = new Intent(LoginActivity.this, MapsActivity.class);
-        mapsActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(mapsActivity);
-    }
 
     private void loadAllServices(){
         serverManager = ServerManager.getInstance();
     }
+
 
     private void loadAllViewElements(){
         this.lblSignUp   = (TextView) findViewById(R.id.lblSignUp);
         this.btnLogin    = (Button) findViewById(R.id.btnLogin);
         this.edtEmail    = (EditText) findViewById(R.id.edtEmail);
         this.edtPassword = (EditText) findViewById(R.id.edtPassword);
+    }
+
+
+    private void initializeServerManager(){
+        if(serverManager == null){
+            serverManager = ServerManager.getInstance();
+        }
+        serverManager.initialize(getApplicationContext());
+    }
+
+
+    private boolean isUserAlreadyLogged(){
+        ParseUser user = User.getCurrentUser();
+        return user != null;
+    }
+
+
+    private void startMapsActivity(){
+        Intent mapsActivity = new Intent(LoginActivity.this, MapsActivity.class);
+        mapsActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(mapsActivity);
     }
 
 
@@ -76,21 +89,19 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new SignInButtonHandler());
     }
 
+
     private class SignInButtonHandler implements View.OnClickListener {
         @Override
         public void onClick(View clickedView){
             final View view = clickedView;
             final ProgressDialog progressDialog = new ProgressDialog(view.getContext());
 
-            EditText userName = (EditText) findViewById(R.id.edtEmail);
-            EditText password = (EditText) findViewById(R.id.edtPassword);
-
             progressDialog.setTitle("Autenticando");
             progressDialog.setMessage("Aguarde enquanto realizamos a autenticação.");
             progressDialog.show();
 
             User.logInInBackground(
-                userName.getText().toString(), password.getText().toString(), new LogInCallback() {
+                edtEmail.getText().toString(), edtPassword.getText().toString(), new LogInCallback() {
                     @Override
                     public void done(ParseUser user, ParseException e) {
                         progressDialog.dismiss();
@@ -110,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
         }
     }
+
 
     private class SignUpLabelHandler implements View.OnClickListener {
         @Override

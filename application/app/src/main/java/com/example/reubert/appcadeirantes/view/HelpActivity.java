@@ -1,7 +1,6 @@
 package com.example.reubert.appcadeirantes.view;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -15,6 +14,7 @@ import com.example.reubert.appcadeirantes.R;
 import com.example.reubert.appcadeirantes.manager.GPSManager;
 import com.example.reubert.appcadeirantes.model.Help;
 import com.example.reubert.appcadeirantes.model.User;
+import com.example.reubert.appcadeirantes.wrappers.ProgressDialog;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -23,20 +23,17 @@ import com.parse.SaveCallback;
 
 public class HelpActivity extends AppCompatActivity {
 
+    public static final String HELP_OBJECT_ID_KEY = "objectId";
+
     private TextView lblPersonName;
     private TextView lblTitle;
     private TextView lblAddress;
     private TextView lblIntervalPoints;
-    private Context context;
+    private ProgressDialog progressDialog;
 
-    private Help help;
-    private ParseUser user;
+    private Help currentHelp;
+    private ParseUser currentLoggedUser;
     private HandleCheckStatusHelp handleCheckStatus;
-
-    private boolean isEqualUser(ParseUser userT, ParseUser userP){
-        if (userT == null) return false;
-        return userT.getObjectId().equals(userP.getObjectId());
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,44 +41,53 @@ public class HelpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_help);
 
         loadElementsFromXML();
-        updateLabelsBasedOnUser();
-
-        String objectId = getIntent().getExtras().getString("objectId");
-        this.help = Help.getHelp(objectId);
-        this.user = User.getCurrentUser();
-        this.context = this;
-
+        loadGeneralValues();
+        loadAllServices();
+        updateLabelsBasedOnHelpedUser();
         onChangeActions();
     }
 
-    public void loadElementsFromXML(){
+    private void loadElementsFromXML(){
         lblPersonName = (TextView) findViewById(R.id.lblPersonName);
         lblTitle = (TextView) findViewById(R.id.lblTitle);
         lblAddress = (TextView) findViewById(R.id.lblAddress);
         lblIntervalPoints = (TextView) findViewById(R.id.lblIntervalPoints);
     }
 
-    public void updateLabelsBasedOnUser(){}
+    private void loadGeneralValues(){
+        currentHelp = Help.getByObjectId(getCurrentHelpObjectId());
+        currentLoggedUser = User.getCurrentUser();
+    }
+
+    private void loadAllServices(){
+        progressDialog = ProgressDialog.getInstance();
+    }
+
+    private void updateLabelsBasedOnHelpedUser(){
+        ParseUser helpedUser = currentHelp.getHelpedParseUser();
+    }
+
+    private String getCurrentHelpObjectId(){
+        return getIntent().getExtras().getString(HELP_OBJECT_ID_KEY);
+    }
 
     public void onChangeActions(){
         final Button buttonHelp = (Button) findViewById(R.id.btnHelped);
-        final ProgressDialog progressDialog = new ProgressDialog(this);
 
-        if (help.getHelperParseUser() == null) {
+        if (currentHelp.getHelperParseUser() == null) {
             buttonHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     final Context context = view.getContext();
-                    progressDialog.setTitle("Ajuda");
-                    progressDialog.setMessage("Aguarde, o pedido está feito");
-                    progressDialog.show();
+                    progressDialog.create(HelpActivity.this, "Ajuda", "Aguarde, o pedido está feito");
 
-                    Help.UserRequestHelped(help.getObjectId(), user, new Help.RequestHelpedCallback() {
+                    Help.UserRequestHelped(currentHelp.getObjectId(), currentLoggedUser, new Help.RequestHelpedCallback() {
                         @Override
                         public void requestHelper(Help responseHelp) {
-                            progressDialog.dismiss();
+                            progressDialog.hide();
+
                             if (responseHelp != null) {
-                                help = responseHelp;
+                                currentHelp = responseHelp;
                                 handleCheckStatus = new HandleCheckStatusHelp(responseHelp, context);
                                 handleCheckStatus.start();
                                 buttonHelp.setVisibility(View.INVISIBLE);
@@ -93,23 +99,22 @@ public class HelpActivity extends AppCompatActivity {
                 }
             });
         }else{
-            if(isEqualUser(help.getHelpedParseUser(), user)) {
+            if(areUsersEqual(currentHelp.getHelpedParseUser(), currentLoggedUser)) {
                 buttonHelp.setText("Finalizar");
                 buttonHelp.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        progressDialog.setTitle("Finalizando");
-                        progressDialog.setMessage("Aguarde estamos finalizando.");
-                        progressDialog.show();
+                        progressDialog.create(HelpActivity.this, "Finalizando", "Aguarde, estamos finalizando.");
 
                         stopHandler();
 
-                        help.finish(new SaveCallback() {
+                        currentHelp.finish(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
-                                progressDialog.dismiss();
+                                progressDialog.hide();
+
                                 Intent data = new Intent();
-                                data.putExtra("objectId", help.getObjectId());
+                                data.putExtra(HELP_OBJECT_ID_KEY, currentHelp.getObjectId());
                                 data.putExtra("type", 2);
                                 setResult(Activity.RESULT_OK, data);
                                 finish();
@@ -124,10 +129,15 @@ public class HelpActivity extends AppCompatActivity {
         }
     }
 
+    private boolean areUsersEqual(ParseUser userT, ParseUser userP){
+        if (userT == null) return false;
+        return userT.getObjectId().equals(userP.getObjectId());
+    }
+
     @Override
     public void onBackPressed(){
-        if (!((isEqualUser(help.getHelperParseUser(), this.user) || isEqualUser(help.getHelpedParseUser(), this.user))
-                && help.getStatus() == Help.STATUS.Helping)) {
+        if (!((areUsersEqual(currentHelp.getHelperParseUser(), this.currentLoggedUser) || areUsersEqual(currentHelp.getHelpedParseUser(), this.currentLoggedUser))
+                && currentHelp.getStatus() == Help.STATUS.Helping)) {
             super.onBackPressed();
         }
     }
@@ -136,7 +146,7 @@ public class HelpActivity extends AppCompatActivity {
         if (handleCheckStatus != null && handleCheckStatus.isAlive()) {
             handleCheckStatus.interrupt();
         }
-        handleCheckStatus = new HandleCheckStatusHelp(help, this);
+        handleCheckStatus = new HandleCheckStatusHelp(currentHelp, this);
         handleCheckStatus.start();
     }
 
@@ -153,8 +163,8 @@ public class HelpActivity extends AppCompatActivity {
         final Context context = this;
 
         if (handleCheckStatus == null || handleCheckStatus.isInterrupted()){
-            if (isEqualUser(help.getHelperParseUser(), user)){
-                help.fetchInBackground(new GetCallback<Help>() {
+            if (areUsersEqual(currentHelp.getHelperParseUser(), currentLoggedUser)){
+                currentHelp.fetchInBackground(new GetCallback<Help>() {
                     @Override
                     public void done(Help object, ParseException e) {
                         if(object.getStatus() == Help.STATUS.Helping){

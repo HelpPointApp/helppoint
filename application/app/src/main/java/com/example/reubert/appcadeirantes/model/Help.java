@@ -13,7 +13,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 @ParseClassName("Help")
-public class Help extends ParseObject{
+public class Help extends ParseObject {
 
     public enum TYPE {
         CarryBag,
@@ -103,7 +103,7 @@ public class Help extends ParseObject{
         userHelp.saveInBackground();
     }
 
-    public static Help getHelp(String objectId){
+    public static Help getByObjectId(String objectId){
         try {
             ParseQuery<Help> helpQuery = ParseQuery.getQuery("Help");
             return helpQuery.get(objectId);
@@ -160,7 +160,7 @@ public class Help extends ParseObject{
     public static void UserRequestHelped(String helpObjectId,
                                          final ParseUser user,
                                          final RequestHelpedCallback callback){
-        final Help help = getHelp(helpObjectId);
+        final Help help = getByObjectId(helpObjectId);
 
         if (help == null) {
             callback.requestHelper(null);

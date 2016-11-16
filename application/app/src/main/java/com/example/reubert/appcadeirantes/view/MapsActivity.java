@@ -167,7 +167,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
-                    Help help = Help.getHelp(data.getExtras().getString("objectId"));
+                    Help help = Help.getByObjectId(data.getExtras().getString("objectId"));
                     helpRequesting = help;
                     handleRequestHelp = new HandleRequestingHelp();
                     handleRequestHelp.start();
@@ -179,7 +179,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }else if (requestCode == 2){
             try{
                 if (resultCode == Activity.RESULT_OK){
-                    helpRequesting = Help.getHelp(data.getExtras().getString("objectId"));
+                    helpRequesting = Help.getByObjectId(data.getExtras().getString("objectId"));
                     this.onChangeStatus(Status.Idle);
                 }
             }catch(Exception e){
@@ -387,7 +387,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // final String objectId = helpRequesting.getObjectId();
             boolean running = true;
             try {
-                Help help = Help.getHelp(helpRequesting.getObjectId());
+                Help help = Help.getByObjectId(helpRequesting.getObjectId());
                 while(running){
                     help.fetch();
                     Help.STATUS status = help.getStatus();
