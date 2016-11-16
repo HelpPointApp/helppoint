@@ -152,7 +152,7 @@ public class Help extends ParseObject{
     public static void getHelpByUserHelper(ParseUser user, FindCallback<Help> callback){
         ParseQuery<Help> helpQuery = ParseQuery.getQuery("Help");
         helpQuery = helpQuery
-                .whereEqualTo("userHelp", user)
+                .whereEqualTo("helperUser", user)
                 .whereEqualTo("status", STATUS.Helping.ordinal());
         helpQuery.findInBackground(callback);
     }

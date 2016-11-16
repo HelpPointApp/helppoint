@@ -149,8 +149,6 @@ public class HelpActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
 
-        final Context context = this;
-
         if (isEqualUser(help.getHelperParseUser(), user)){
             help.fetchInBackground(new GetCallback<Help>() {
                 @Override
