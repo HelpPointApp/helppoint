@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.example.reubert.appcadeirantes.R;
 import com.example.reubert.appcadeirantes.manager.GPSManager;
+import com.example.reubert.appcadeirantes.model.Avaliation;
 import com.example.reubert.appcadeirantes.model.Help;
 import com.example.reubert.appcadeirantes.model.User;
 import com.example.reubert.appcadeirantes.wrappers.ProgressDialog;
@@ -29,6 +30,7 @@ public class HelpActivity extends AppCompatActivity {
     private TextView lblTitle;
     private TextView lblAddress;
     private TextView lblIntervalPoints;
+
     private ProgressDialog progressDialog;
 
     private Help currentHelp;
@@ -44,6 +46,7 @@ public class HelpActivity extends AppCompatActivity {
         loadGeneralValues();
         loadAllServices();
         updateLabelsBasedOnHelpedUser();
+
         onChangeActions();
     }
 
@@ -88,8 +91,7 @@ public class HelpActivity extends AppCompatActivity {
 
                             if (responseHelp != null) {
                                 currentHelp = responseHelp;
-                                handleCheckStatus = new HandleCheckStatusHelp(responseHelp, context);
-                                handleCheckStatus.start();
+                                startHandler();
                                 buttonHelp.setVisibility(View.INVISIBLE);
                             } else {
                                 finish();
@@ -105,9 +107,7 @@ public class HelpActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         progressDialog.create(HelpActivity.this, "Finalizando", "Aguarde, estamos finalizando.");
-
                         stopHandler();
-
                         currentHelp.finish(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
@@ -146,7 +146,8 @@ public class HelpActivity extends AppCompatActivity {
         if (handleCheckStatus != null && handleCheckStatus.isAlive()) {
             handleCheckStatus.interrupt();
         }
-        handleCheckStatus = new HandleCheckStatusHelp(currentHelp, this);
+
+        handleCheckStatus = new HandleCheckStatusHelp(currentHelp);
         handleCheckStatus.start();
     }
 
@@ -160,19 +161,15 @@ public class HelpActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
 
-        final Context context = this;
-
-        if (handleCheckStatus == null || handleCheckStatus.isInterrupted()){
-            if (areUsersEqual(currentHelp.getHelperParseUser(), currentLoggedUser)){
-                currentHelp.fetchInBackground(new GetCallback<Help>() {
-                    @Override
-                    public void done(Help object, ParseException e) {
-                        if(object.getStatus() == Help.STATUS.Helping){
-                            startHandler();
-                        }
+        if (areUsersEqual(currentHelp.getHelperParseUser(), currentLoggedUser)){
+            currentHelp.fetchInBackground(new GetCallback<Help>() {
+                @Override
+                public void done(Help object, ParseException e) {
+                    if(object.getStatus() == Help.STATUS.Helping){
+                        startHandler();
                     }
-                });
-            }
+                }
+            });
         }
     }
 
@@ -191,12 +188,10 @@ public class HelpActivity extends AppCompatActivity {
     private class HandleCheckStatusHelp extends Thread{
 
         private Help help;
-        private Context context;
 
-        public HandleCheckStatusHelp(Help help, Context context){
+        public HandleCheckStatusHelp(Help help){
             super();
             this.help = help;
-            this.context = context;
         }
 
         @Override
@@ -207,12 +202,13 @@ public class HelpActivity extends AppCompatActivity {
             ParseGeoPoint parseGeoPoint;
             ParseUser parserUser = this.help.getHelpedParseUser();
             try {
-                parserUser.fetchIfNeeded();
+                parserUser.fetch();
 
                 while (running) {
                     auxHelp = this.help.fetch();
-                    userLocation = GPSManager.getInstance(context).getUserLocation();
-                    parseGeoPoint = new ParseGeoPoint(userLocation.getLatitude(), userLocation.getLongitude());
+                    userLocation = GPSManager.getInstance(HelpActivity.this).getUserLocation();
+                    parseGeoPoint = new ParseGeoPoint(
+                            userLocation.getLatitude(), userLocation.getLongitude());
                     parserUser.put("lastPosition", parseGeoPoint);
                     parserUser.saveInBackground();
 
@@ -229,7 +225,7 @@ public class HelpActivity extends AppCompatActivity {
                     Thread.sleep(5000);
                 }
             } catch (Exception e) {
-                Log.e("thread", e.toString());
+                Log.e("thread check status", e.toString());
             }
         }
     }

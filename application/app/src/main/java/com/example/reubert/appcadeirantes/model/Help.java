@@ -28,7 +28,7 @@ public class Help extends ParseObject {
     }
 
     public ParseUser getHelpedParseUser(){
-        return (ParseUser) get("userTarget");
+        return (ParseUser) get("helpedUser");
     }
 
     public void setHelpedParseUser(ParseUser user){
@@ -36,7 +36,7 @@ public class Help extends ParseObject {
     }
 
     public ParseUser getHelperParseUser(){
-        return (ParseUser) get("helpedUser");
+        return (ParseUser) get("helperUser");
     }
 
     public void setHelperParseUser(ParseUser user){
@@ -152,7 +152,7 @@ public class Help extends ParseObject {
     public static void getHelpByUserHelper(ParseUser user, FindCallback<Help> callback){
         ParseQuery<Help> helpQuery = ParseQuery.getQuery("Help");
         helpQuery = helpQuery
-                .whereEqualTo("userHelp", user)
+                .whereEqualTo("helperUser", user)
                 .whereEqualTo("status", STATUS.Helping.ordinal());
         helpQuery.findInBackground(callback);
     }

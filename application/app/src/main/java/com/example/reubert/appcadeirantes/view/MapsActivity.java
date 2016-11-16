@@ -46,7 +46,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Intent requestHelpIntent;
     private GoogleMap googleMap;
     private GPSManager gpsManager;
-    private Context context;
 
     private ParseUser user;
     private List<Help> helps;
@@ -64,7 +63,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_maps);
         btnRequestHelp = (Button) findViewById(R.id.btnRequestHelp);
         TextView lblMyPoints = (TextView) findViewById(R.id.label_my_points);
-        context = this;
         configureAppBar();
         configureTransparencyOnStatusBar();
         loadAllViewElements();
@@ -75,7 +73,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             int status = this.user.getInt("status");
             User.STATUS currentStatus = User.STATUS.values()[status];
             lblMyPoints.setText(String.valueOf(this.user.getInt("points")));
-
 
             if (currentStatus == User.STATUS.HelpInProgress){
                 Help.getHelpByUserHelper(this.user, new FindCallback<Help>() {
@@ -101,8 +98,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     public void done(List<Help> objects, ParseException e) {
                         if (e != null){
                             if(objects.size() > 0){
-                                Help _help = objects.get(0);
-                                helpRequesting = _help;
+                                Help help = objects.get(0);
+                                helpRequesting = help;
                                 onChangeStatus(Status.Requesting);
                             }
                         }
