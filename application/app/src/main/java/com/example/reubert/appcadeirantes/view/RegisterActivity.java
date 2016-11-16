@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.ToolbarWidgetWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.reubert.appcadeirantes.R;
 import com.example.reubert.appcadeirantes.factory.UserFactory;
@@ -29,6 +32,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     public Button btnCreateAccount;
 
+    public Toolbar btnGoBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,15 +46,15 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     public void loadAllViewElements(){
-        edtFirstName = (EditText) findViewById(R.id.edtFirstName);
-        edtLastName = (EditText) findViewById(R.id.edtLastName);
-        edtEmail = (EditText) findViewById(R.id.edtEmail);
-        edtPassword = (EditText) findViewById(R.id.edtPassword);
+        edtFirstName     = (EditText) findViewById(R.id.edtFirstName);
+        edtLastName      = (EditText) findViewById(R.id.edtLastName);
+        edtEmail         = (EditText) findViewById(R.id.edtEmail);
+        edtPassword      = (EditText) findViewById(R.id.edtPassword);
         edtPasswordAgain = (EditText) findViewById(R.id.edtPasswordAgain);
-        edtCPF = (EditText) findViewById(R.id.edtCPF);
-        edtBirthday = (EditText) findViewById(R.id.edtBirthday);
+        edtCPF           = (EditText) findViewById(R.id.edtCPF);
+        edtBirthday      = (EditText) findViewById(R.id.edtBirthday);
         btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
-        //btnBack          = (ImageView) findViewById(R.id.btnBack);
+        btnGoBack        = (Toolbar) findViewById(R.id.symbol_go_back);
     }
 
 
@@ -61,7 +66,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void createClickListeners(){
         btnCreateAccount.setOnClickListener(new SignUpButtonHandler());
-        //btnBack.setOnClickListener(new CancelButtonHandler());
+        btnGoBack.setOnClickListener(new CancelButtonHandler());
+        //btnGoBack = setSupportActionBar(btnGoBack);
     }
 
 
@@ -100,8 +106,26 @@ public class RegisterActivity extends AppCompatActivity {
     public class CancelButtonHandler implements View.OnClickListener {
         @Override
         public void onClick(View clickedView){
+            clearAllEditText();
+            goBackToLogin();
             finish();
         }
+    }
+
+    public void clearAllEditText(){
+        edtFirstName.getText().clear();
+        edtLastName.getText().clear();
+        edtEmail.getText().clear();
+        edtPassword.getText().clear();
+        edtPasswordAgain.getText().clear();
+        edtCPF.getText().clear();
+        edtBirthday.getText().clear();
+    }
+
+    public void goBackToLogin(){
+        Intent LoginActivity = new Intent(this, LoginActivity.class);
+        LoginActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(LoginActivity);
     }
 
 

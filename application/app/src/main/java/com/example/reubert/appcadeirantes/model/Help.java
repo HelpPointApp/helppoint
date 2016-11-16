@@ -18,6 +18,7 @@ public class Help extends ParseObject {
     public enum TYPE {
         CarryBag,
         ClimbLadder,
+        CrossAStreet
     }
 
     public enum STATUS {

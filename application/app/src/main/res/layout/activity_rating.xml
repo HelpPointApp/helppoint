@@ -40,11 +40,14 @@
                 android:layout_marginBottom="25dp"/>
 
             <RatingBar
-                android:layout_width="match_parent"
+                android:layout_width="251dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="35dp"
+                android:layout_marginLeft="55dp"
                 android:id="@+id/ratingStars"
                 android:numStars="5"
-                android:layout_marginBottom="25dp"/>
+                android:stepSize="1"
+                />
 
             <Button
                 android:text="@string/send_rate"
