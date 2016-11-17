@@ -10,10 +10,12 @@
 
     <dimen name="content_text_size">14dp</dimen>
     <dimen name="content_icon_size">18dp</dimen>
+
+    <dimen name="input_text_size">16dp</dimen>
+    <dimen name="input_padding_size">5dp</dimen>
+
     <dimen name="h3_text_size">16dp</dimen>
 
-    <!-- Specific sizes -->
     <dimen name="header_text_size">20dp</dimen>
     <dimen name="header_icon_size">20dp</dimen>
-    <dimen name="banner_name_text_size">16dp</dimen>
 </resources>

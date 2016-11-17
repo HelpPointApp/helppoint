@@ -42,6 +42,12 @@ public class RequestHelpActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onDestroy(){
+        progressDialog.hide(); // prevents the WindowLeaked problem
+    }
+
+
     private void loadElementsFromXML(){
         btnRequestHelp = (Button) findViewById(R.id.btnRequestHelp);
         spinnerHelpTypes = (Spinner) findViewById(R.id.spnHelpTypes);
@@ -61,7 +67,7 @@ public class RequestHelpActivity extends AppCompatActivity {
 
     private void loadHelpTypesOnSpinner(){
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.help_array, android.R.layout.simple_spinner_item);
+                R.array.help_array, R.layout.spinner_component);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHelpTypes.setAdapter(adapter);
     }

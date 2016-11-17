@@ -52,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
         edtCPF           = (EditText) findViewById(R.id.edtCPF);
         edtBirthday      = (EditText) findViewById(R.id.edtBirthday);
         btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar          = (Toolbar) findViewById(R.id.toolbar);
     }
 
 
@@ -96,17 +96,6 @@ public class RegisterActivity extends AppCompatActivity {
         if(signUpProgressDialog != null){
             signUpProgressDialog.hide();
         }
-    }
-
-
-    public void clearAllEditText(){
-        edtFirstName.getText().clear();
-        edtLastName.getText().clear();
-        edtEmail.getText().clear();
-        edtPassword.getText().clear();
-        edtPasswordAgain.getText().clear();
-        edtCPF.getText().clear();
-        edtBirthday.getText().clear();
     }
 
 

@@ -8,4 +8,5 @@
     <color name="lightText">#FFF</color>
     <color name="textColorOnDark">#fff</color>
     <color name="textColorOnLight">#8f8f8f</color>
+    <color name="textColorOnLightDarker">#3c3c3c</color>
 </resources>
