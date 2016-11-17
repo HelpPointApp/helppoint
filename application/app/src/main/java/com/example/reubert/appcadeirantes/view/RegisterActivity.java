@@ -6,11 +6,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.ToolbarWidgetWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.example.reubert.appcadeirantes.R;
 import com.example.reubert.appcadeirantes.factory.UserFactory;
@@ -32,20 +30,20 @@ public class RegisterActivity extends AppCompatActivity {
 
     public Button btnCreateAccount;
 
-    public Toolbar btnGoBack;
+    public Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        loadAllViewElements();
+        loadElementsFromXML();
         normalizePasswordAppearance();
         createClickListeners();
     }
 
 
-    public void loadAllViewElements(){
+    public void loadElementsFromXML(){
         edtFirstName     = (EditText) findViewById(R.id.edtFirstName);
         edtLastName      = (EditText) findViewById(R.id.edtLastName);
         edtEmail         = (EditText) findViewById(R.id.edtEmail);
@@ -54,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
         edtCPF           = (EditText) findViewById(R.id.edtCPF);
         edtBirthday      = (EditText) findViewById(R.id.edtBirthday);
         btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
-        btnGoBack        = (Toolbar) findViewById(R.id.symbol_go_back);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 
 
@@ -66,8 +64,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void createClickListeners(){
         btnCreateAccount.setOnClickListener(new SignUpButtonHandler());
-        btnGoBack.setOnClickListener(new CancelButtonHandler());
-        //btnGoBack = setSupportActionBar(btnGoBack);
     }
 
 
@@ -103,15 +99,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    public class CancelButtonHandler implements View.OnClickListener {
-        @Override
-        public void onClick(View clickedView){
-            clearAllEditText();
-            goBackToLogin();
-            finish();
-        }
-    }
-
     public void clearAllEditText(){
         edtFirstName.getText().clear();
         edtLastName.getText().clear();
@@ -120,12 +107,6 @@ public class RegisterActivity extends AppCompatActivity {
         edtPasswordAgain.getText().clear();
         edtCPF.getText().clear();
         edtBirthday.getText().clear();
-    }
-
-    public void goBackToLogin(){
-        Intent LoginActivity = new Intent(this, LoginActivity.class);
-        LoginActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(LoginActivity);
     }
 
 

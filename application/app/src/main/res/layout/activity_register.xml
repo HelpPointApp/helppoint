@@ -8,13 +8,13 @@
     tools:context=".view.RegisterActivity">
 
     <include
-        android:id="@+id/symbol_go_back"
-        layout="@layout/toolbar_go_back_component"/>
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_component"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/symbol_go_back"
+        android:layout_below="@+id/toolbar"
         android:id="@+id/scrollView">
 
         <LinearLayout
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="@dimen/activity_horizontal_margin"
-            android:layout_below="@+id/symbol_go_back">
+            android:layout_below="@+id/toolbar">
 
             <EditText
                 android:layout_width="match_parent"

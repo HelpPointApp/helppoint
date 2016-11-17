@@ -25,7 +25,7 @@ public class ProgressDialog {
     }
 
     public void hide(){
-        if(progressDialog != null){
+        if(progressDialog != null && progressDialog.isShowing()){
             progressDialog.hide();
         }
     }
