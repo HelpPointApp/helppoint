@@ -14,18 +14,11 @@
 
         <ImageView
             android:id="@+id/icon_my_points"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/header_icon_size"
+            android:layout_height="@dimen/header_icon_size"
             android:src="@drawable/ic_diamond"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"/>
-
-        <ImageView
-            android:id="@+id/icon_go_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/back_symbol"
             android:layout_centerVertical="true"/>
 
         <TextView

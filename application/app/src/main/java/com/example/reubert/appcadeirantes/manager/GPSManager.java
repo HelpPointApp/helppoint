@@ -10,6 +10,8 @@ import android.location.LocationManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 
+import com.example.reubert.appcadeirantes.exception.UnknownLocation;
+
 public class GPSManager {
 
     private static GPSManager instance;
@@ -55,6 +57,10 @@ public class GPSManager {
 
         if(GPSManager.isPermissionGranted(context)) {
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
+
+        if(location == null){
+            throw new UnknownLocation();
         }
 
         return location;
