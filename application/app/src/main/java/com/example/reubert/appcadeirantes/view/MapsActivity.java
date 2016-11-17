@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.reubert.appcadeirantes.exception.UnknownLocation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -292,24 +294,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void focusOnCurrentUserPosition(){
-        Location userLocation = gpsManager.getUserLocation();
+        try {
+            Location userLocation = gpsManager.getUserLocation();
+            double latitude;
+            double longitude;
 
-        double latitude;
-        double longitude;
+            if(userLocation != null){
+                latitude = userLocation.getLatitude();
+                longitude = userLocation.getLongitude();
+            } else {
+                latitude = -19.9273724;
+                longitude = -43.9474144;
+            }
 
-        if(userLocation != null){
-            latitude = userLocation.getLatitude();
-            longitude = userLocation.getLongitude();
-        } else {
-            latitude = -19.9273724;
-            longitude = -43.9474144;
+            this._lat = latitude;
+            this._long = longitude;
+
+            googleMap.moveCamera(
+                    CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 17)
+            );
+        } catch(UnknownLocation e){
+            //@toDo: implement requestSingleUpdate after
         }
-
-        this._lat = latitude;
-        this._long = longitude;
-
-        googleMap.moveCamera(
-                CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 17));
     }
 
     private void onChangeStatus(Status status){
