@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar_component"/>
+        layout="@layout/toolbar_go_back_component"/>
 
     <ScrollView
         android:layout_width="match_parent"

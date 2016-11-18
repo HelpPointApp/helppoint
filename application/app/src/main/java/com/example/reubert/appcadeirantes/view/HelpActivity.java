@@ -18,6 +18,7 @@ import com.example.reubert.appcadeirantes.wrappers.ProgressDialog;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -60,6 +61,15 @@ public class HelpActivity extends AppCompatActivity {
     private void loadGeneralValues(){
         currentHelp = Help.getByObjectId(getCurrentHelpObjectId());
         currentLoggedUser = User.getCurrentUser();
+        ParseUser helpedUser = currentHelp.getHelpedParseUser();
+        helpedUser.fetchIfNeededInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser object, ParseException e) {
+                if(e == null){
+                    lblPersonName.setText(object.getString("firstName"));
+                }
+            }
+        });
     }
 
     private void loadAllServices(){
