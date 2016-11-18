@@ -10,7 +10,7 @@ import android.location.LocationManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 
-import com.example.reubert.appcadeirantes.exception.UnknownLocation;
+import com.example.reubert.appcadeirantes.exception.UnknownLocationException;
 
 public class GPSManager {
 
@@ -60,7 +60,7 @@ public class GPSManager {
         }
 
         if(location == null){
-            throw new UnknownLocation();
+            throw new UnknownLocationException();
         }
 
         return location;

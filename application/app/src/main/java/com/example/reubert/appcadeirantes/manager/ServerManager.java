@@ -31,6 +31,6 @@ public class ServerManager {
     private void registerSubclasses(){
         ParseObject.registerSubclass(Help.class);
         ParseObject.registerSubclass(User.class);
-        ParseObject.registerSubclass(Avaliation.class);
+        ParseObject.registerSubclass(Rating.class);
     }
 }

@@ -2,6 +2,7 @@ package com.example.reubert.appcadeirantes.model;
 
 import android.util.Log;
 
+import com.example.reubert.appcadeirantes.exception.NotActiveHelpException;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -75,14 +76,6 @@ public class Help extends ParseObject {
 
     public STATUS getStatus(){
         return STATUS.values()[getInt("status")];
-    }
-
-    public void avaliation(int stars, SaveCallback saveCallback){
-        Avaliation avaliation = new Avaliation();
-        avaliation.setHelp(this);
-        avaliation.setRating(stars);
-        avaliation.setUserHelp(this.getHelperParseUser());
-        avaliation.saveInBackground(saveCallback);
     }
 
     public void cancel(SaveCallback callback){

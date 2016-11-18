@@ -8,51 +8,42 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.reubert.appcadeirantes.R;
-import com.example.reubert.appcadeirantes.model.Avaliation;
-import com.example.reubert.appcadeirantes.model.User;
+import com.example.reubert.appcadeirantes.model.Rating;
 
 public class RatingActivity extends AppCompatActivity {
 
-    public TextView lblTitle;
-    public TextView lblSubtitle;
-
-    public RatingBar ratingStars;
-
-    public Button btnRate;
+    private TextView lblTitle;
+    private TextView lblSubtitle;
+    private Button btnRate;
+    private RatingBar rtbRatingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rating);
 
-        loadAllViewElements();
+        loadElementsFromXML();
         createClickListeners();
-
-        User user = new User();
-        lblTitle.setText("Como você avalia a ajuda do(a)" +user.getFirstName()+" ?");
-        lblSubtitle.setText("Sua avaliação é crucial para que "+user.getFirstName()+" receba uma pontuação justa pela ajuda.");
     }
 
-    public void loadAllViewElements(){
-        lblTitle       = (TextView) findViewById(R.id.lblTitle);
-        lblSubtitle      = (TextView) findViewById(R.id.lblSubtitle);
-        ratingStars     = (RatingBar) findViewById(R.id.ratingStars);
+    public void loadElementsFromXML(){
+        lblTitle = (TextView) findViewById(R.id.lblTitle);
+        lblSubtitle = (TextView) findViewById(R.id.lblSubtitle);
+        rtbRatingBar = (RatingBar) findViewById(R.id.ratingStars);
         btnRate = (Button) findViewById(R.id.btnRate);
     }
 
     public void createClickListeners(){
-        btnRate.setOnClickListener(new sendAvaliationHandler());
+        btnRate.setOnClickListener(new RateButtonHandler());
     }
 
-    public class sendAvaliationHandler implements View.OnClickListener{
+    public class RateButtonHandler implements View.OnClickListener {
         @Override
         public void onClick(View clickedView){
-            RatingBar rtbRatingBar = (RatingBar) findViewById(R.id.ratingStars);
-
-            final View view = clickedView;
-            Avaliation avaliation = new Avaliation();
-
-            avaliation.setRating(rtbRatingBar.getNumStars());
+            Rating rating = new Rating();
+            rating.setHelp(null); // Daqui a pouco pego esse help
+            rating.setHelperUser(null);
+            rating.setStars(rtbRatingBar.getNumStars());
         }
     }
 }

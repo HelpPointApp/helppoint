@@ -14,7 +14,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.reubert.appcadeirantes.R;
-import com.example.reubert.appcadeirantes.exception.UnknownLocation;
+import com.example.reubert.appcadeirantes.exception.UnknownLocationException;
 import com.example.reubert.appcadeirantes.manager.GPSManager;
 import com.example.reubert.appcadeirantes.model.Help;
 import com.example.reubert.appcadeirantes.model.User;
@@ -92,7 +92,7 @@ public class RequestHelpActivity extends AppCompatActivity {
                         User.getCurrentUser(), typeHelp, edtObservation.getText().toString(),
                         userLocation.getLatitude(), userLocation.getLongitude(), new SaveHelp()
                 );
-            } catch(UnknownLocation e){
+            } catch(UnknownLocationException e){
                 // @toDo: implement requestSingleUpdate method to force update, not so important for now
                 progressDialog.hide();
                 Toast.makeText(RequestHelpActivity.this, "Posição do GPS não encontrada", Toast.LENGTH_SHORT).show();

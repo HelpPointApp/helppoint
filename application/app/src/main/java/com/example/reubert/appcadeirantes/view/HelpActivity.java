@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.example.reubert.appcadeirantes.R;
 import com.example.reubert.appcadeirantes.manager.GPSManager;
-import com.example.reubert.appcadeirantes.model.Avaliation;
 import com.example.reubert.appcadeirantes.model.Help;
 import com.example.reubert.appcadeirantes.model.User;
 import com.example.reubert.appcadeirantes.wrappers.ProgressDialog;

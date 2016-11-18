@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.reubert.appcadeirantes.exception.UnknownLocation;
+import com.example.reubert.appcadeirantes.exception.UnknownLocationException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -312,7 +312,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             googleMap.moveCamera(
                     CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 17)
             );
-        } catch(UnknownLocation e){
+        } catch(UnknownLocationException e){
             //@toDo: implement requestSingleUpdate after
         }
     }

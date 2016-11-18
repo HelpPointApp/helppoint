@@ -4,15 +4,15 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-@ParseClassName("Avaliation")
-public class Avaliation extends ParseObject {
+@ParseClassName("Rating")
+public class Rating extends ParseObject {
 
-    public void setUserHelp(ParseUser user){
-        put("userHelp", user);
+    public void setHelperUser(ParseUser user){
+        put("helperUser", user);
     }
 
-    public ParseUser getUserHelp(){
-        return (ParseUser) get("userHelp");
+    public ParseUser getHelperUser(){
+        return (ParseUser) get("helperUser");
     }
 
     public void setHelp(Help help){
@@ -23,11 +23,11 @@ public class Avaliation extends ParseObject {
         return (Help) get("help");
     }
 
-    public void setRating(int stars){
+    public void setStars(int stars){
         put("stars", stars);
     }
 
-    public int getRating(){
+    public int getStars(){
         return getInt("stars");
     }
 

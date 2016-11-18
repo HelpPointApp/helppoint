@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -36,18 +36,20 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/lblSubtitle"
                 android:textSize="@dimen/content_text_size"
+                android:layout_below="@+id/lblTitle"
                 android:textColor="@color/textColorOnLight"
                 android:layout_marginBottom="25dp"/>
 
+
             <RatingBar
-                android:layout_width="251dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="35dp"
-                android:layout_marginLeft="55dp"
                 android:id="@+id/ratingStars"
+                android:layout_below="@+id/lblSubtitle"
                 android:numStars="5"
                 android:stepSize="1"
-                />
+                android:layout_centerHorizontal="true"/>
 
             <Button
                 android:text="@string/send_rate"
@@ -55,9 +57,10 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btnRate"
                 android:background="@color/colorPrimary"
-                android:textColor="@color/textColorOnDark" />
+                android:textColor="@color/textColorOnDark"
+                android:layout_below="@+id/ratingStars"/>
 
-        </LinearLayout>
+        </RelativeLayout>
     </ScrollView>
 
 </RelativeLayout>
