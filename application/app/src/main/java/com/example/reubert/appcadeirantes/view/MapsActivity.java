@@ -1,8 +1,6 @@
 package com.example.reubert.appcadeirantes.view;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -14,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.reubert.appcadeirantes.exception.UnknownLocationException;
+import com.example.reubert.appcadeirantes.wrappers.ProgressDialog;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -77,7 +76,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             lblMyPoints.setText(String.valueOf(this.user.getInt("points")));
 
             if (currentStatus == User.STATUS.HelpInProgress){
-                Help.getHelpByUserHelper(this.user, new FindCallback<Help>() {
+                Help.getHelpinProgressByUser(this.user, new FindCallback<Help>() {
                     @Override
                     public void done(List<Help> objects, ParseException e) {
                         if(e == null){
@@ -163,21 +162,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1) {
-            if (resultCode == Activity.RESULT_OK) {
-                try {
-                    Help help = Help.getByObjectId(data.getExtras().getString("objectId"));
-                    helpRequesting = help;
-                    handleRequestHelp = new HandleRequestingHelp();
-                    handleRequestHelp.start();
+            try {
+                if (resultCode == Activity.RESULT_OK) {
+                    helpRequesting = Help.getActive();
+                    startHandleRequestHelp();
                     this.onChangeStatus(Status.Requesting);
-                } catch (Exception e) {
-                    Log.e("error activity result", e.toString());
                 }
+            } catch (Exception e) {
+                Log.e("error activity result", e.toString());
             }
         }else if (requestCode == 2){
             try{
                 if (resultCode == Activity.RESULT_OK){
-                    helpRequesting = Help.getByObjectId(data.getExtras().getString("objectId"));
+                    Intent intent = new Intent(MapsActivity.this, RatingActivity.class);
+                    startActivity(intent);
                     this.onChangeStatus(Status.Idle);
                 }
             }catch(Exception e){
@@ -189,17 +187,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onPause(){
         super.onPause();
-        if(handleRequestHelp != null && handleRequestHelp.isAlive()){
-            handleRequestHelp.isInterrupted();
-        }
+        stopHandleRequestHelp();
+        stopHandleRequestPosition();
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        if (handleRequestHelp != null && handleRequestHelp.isAlive()){
-            handleRequestHelp.isInterrupted();
-        }
+        stopHandleRequestHelp();
+        stopHandleRequestPosition();
     }
 
     private void configureAppBar(){
@@ -329,38 +325,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             });
         }
         else if (status == Status.Requesting){
-            final Context context = this;
+            final ProgressDialog progressDialog = ProgressDialog.getInstance();
             btnRequestHelp.setText("CANCELAR");
             btnRequestHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final ProgressDialog progressDialog = new ProgressDialog(context);
-                    progressDialog.setTitle("Cancelando");
-                    progressDialog.setMessage("Aguarde enquanto estamos cancelando seu pedido");
-                    progressDialog.show();
-                    handleRequestHelp.interrupt();
-                    handleRequestHelp = null;
+                    progressDialog.create(MapsActivity.this, "Cancelado", "Aguarde enquanto estamos cancelando seu pedido");
+                    stopHandleRequestHelp();
                     helpRequesting.cancel(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            progressDialog.dismiss();
+                            progressDialog.hide();
                             onChangeStatus(Status.Idle);
                             refreshMarkers();
                         }
                     });
-                    if (handleRequestHelp != null){
-                        handleRequestHelp.interrupt();
-                    }
                 }
             });
         }else if (status == Status.WaitingHelp){
-            btnRequestHelp.setText("INICIAR");
+            btnRequestHelp.setText("CHEGOU!");
             btnRequestHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (handleRequestHelpPosition != null && handleRequestHelpPosition.isInterrupted()){
-                        handleRequestHelp.isInterrupted();
-                    }
+                    stopHandleRequestPosition();
                     startActivityHelp(helpRequesting.getObjectId());
                 }
             });
@@ -378,9 +365,38 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(new LatLng(0, 0));
         Marker marker = googleMap.addMarker(markerOptions);
+        startHandleRequestPosition(help, marker);
+        onChangeStatus(Status.WaitingHelp);
+    }
+
+    private void startHandleRequestHelp(){
+        if(handleRequestHelp != null && handleRequestHelp.isAlive()){
+            handleRequestHelp.interrupt();
+        }
+
+        handleRequestHelp = new HandleRequestingHelp();
+        handleRequestHelp.start();
+    }
+
+    private void stopHandleRequestHelp(){
+        if (handleRequestHelp != null && handleRequestHelp.isAlive()){
+            handleRequestHelp.isInterrupted();
+        }
+    }
+
+    private void startHandleRequestPosition(Help help, Marker marker){
+        if(handleRequestHelpPosition != null && handleRequestHelpPosition.isAlive()){
+            handleRequestHelpPosition.interrupt();
+        }
+
         handleRequestHelpPosition = new HandleRequestHelpPosition(help, marker);
         handleRequestHelpPosition.start();
-        onChangeStatus(Status.WaitingHelp);
+    }
+
+    private void stopHandleRequestPosition(){
+        if (handleRequestHelpPosition != null && handleRequestHelpPosition.isAlive()){
+            handleRequestHelpPosition.isInterrupted();
+        }
     }
 
     private class HandleRequestingHelp extends Thread{

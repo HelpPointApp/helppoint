@@ -14,6 +14,9 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ParseClassName("Help")
 public class Help extends ParseObject {
 
@@ -92,20 +95,29 @@ public class Help extends ParseObject {
     public void cancel(SaveCallback callback){
         this.setStatus(STATUS.Canceled);
         this.saveInBackground(callback);
+        instance = null;
+    }
+
+    public void rating(int stars, SaveCallback callback){
+        Rating rating = new Rating();
+        rating.setHelp(this);
+        rating.setHelperUser(this.getHelperParseUser());
+        rating.setStars(stars);
+        rating.saveInBackground(callback);
+        instance = null;
     }
 
     public void finish(SaveCallback saveCallback){
         ParseUser userHelp = this.getHelperParseUser();
         ParseUser userTarget = this.getHelpedParseUser();
 
-        userTarget.put("status", User.STATUS.Idle.ordinal());
-        userHelp.put("status", User.STATUS.Idle.ordinal());
-
         this.setStatus(STATUS.Finished);
         this.saveInBackground(saveCallback);
 
-        userTarget.saveInBackground();
+        userHelp.put("status", User.STATUS.Idle.ordinal());
         userHelp.saveInBackground();
+        userTarget.put("status", User.STATUS.Idle.ordinal());
+        userTarget.saveInBackground();
     }
 
     public static Help getByObjectId(String objectId){
@@ -158,12 +170,23 @@ public class Help extends ParseObject {
         return instance;
     }
 
-    public static void getHelpByUserHelper(ParseUser user, FindCallback<Help> callback){
-        ParseQuery<Help> helpQuery = ParseQuery.getQuery("Help");
-        helpQuery = helpQuery
+    public static void getHelpinProgressByUser(ParseUser user, FindCallback<Help> callback){
+        ParseQuery<Help> helperQuery = ParseQuery.getQuery("Help");
+        helperQuery = helperQuery
                 .whereEqualTo("helperUser", user)
                 .whereEqualTo("status", STATUS.Helping.ordinal());
-        helpQuery.findInBackground(callback);
+
+        ParseQuery<Help> helpedQuery = ParseQuery.getQuery("Help");
+        helpedQuery = helpedQuery
+                .whereEqualTo("helpedUser", user)
+                .whereEqualTo("status", STATUS.Helping.ordinal());
+
+        List<ParseQuery<Help>> queryList = new ArrayList<>();
+        queryList.add(helperQuery);
+        queryList.add(helpedQuery);
+
+        ParseQuery<Help> parseQuery = ParseQuery.or(queryList);
+        parseQuery.findInBackground(callback);
     }
 
     public static void UserRequestHelped(String helpObjectId,
@@ -204,11 +227,11 @@ public class Help extends ParseObject {
     public static void getRequestHelpByUser(ParseUser user, FindCallback<Help> callback){
         ParseQuery<Help> helpQuery = ParseQuery.getQuery("Help");
         helpQuery.whereEqualTo("status", STATUS.Requesting.ordinal());
-        helpQuery.whereEqualTo("userTarget", user);
+        helpQuery.whereEqualTo("helpedUser", user);
         helpQuery.findInBackground(callback);
     }
 
-    public static class RequestHelpedCallback{
-        public void requestHelper(Help help){}
+    public interface RequestHelpedCallback{
+        void requestHelper(Help help);
     }
 }

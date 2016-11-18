@@ -18,6 +18,7 @@ import com.example.reubert.appcadeirantes.wrappers.ProgressDialog;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -80,7 +81,6 @@ public class HelpActivity extends AppCompatActivity {
             buttonHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final Context context = view.getContext();
                     progressDialog.create(HelpActivity.this, "Ajuda", "Aguarde, o pedido está feito");
 
                     Help.UserRequestHelped(currentHelp.getObjectId(), currentLoggedUser, new Help.RequestHelpedCallback() {
@@ -105,16 +105,15 @@ public class HelpActivity extends AppCompatActivity {
                 buttonHelp.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        progressDialog.create(HelpActivity.this, "Finalizando", "Aguarde, estamos finalizando.");
                         stopHandler();
+                        progressDialog.create(HelpActivity.this, "Finalizando", "Aguarde, estamos finalizando.");
                         currentHelp.finish(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
                                 progressDialog.hide();
 
                                 Intent data = new Intent();
-                                data.putExtra(HELP_OBJECT_ID_KEY, currentHelp.getObjectId());
-                                data.putExtra("type", 2);
+                                data.putExtra("objectId", currentHelp.getObjectId());
                                 setResult(Activity.RESULT_OK, data);
                                 finish();
                             }
@@ -196,15 +195,16 @@ public class HelpActivity extends AppCompatActivity {
         @Override
         public void run() {
             boolean running = true;
-            Help auxHelp;
             Location userLocation;
+            Help auxHelp;
             ParseGeoPoint parseGeoPoint;
             ParseUser parserUser = this.help.getHelpedParseUser();
             try {
                 parserUser.fetch();
 
                 while (running) {
-                    auxHelp = this.help.fetch();
+                    auxHelp = help.fetch();
+
                     userLocation = GPSManager.getInstance(HelpActivity.this).getUserLocation();
                     parseGeoPoint = new ParseGeoPoint(
                             userLocation.getLatitude(), userLocation.getLongitude());

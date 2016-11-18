@@ -41,14 +41,6 @@ public class RequestHelpActivity extends AppCompatActivity {
         loadHelpTypesOnSpinner();
     }
 
-
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        progressDialog.hide(); // prevents the WindowLeaked problem
-    }
-
-
     private void loadElementsFromXML(){
         btnRequestHelp = (Button) findViewById(R.id.btnRequestHelp);
         spinnerHelpTypes = (Spinner) findViewById(R.id.spnHelpTypes);

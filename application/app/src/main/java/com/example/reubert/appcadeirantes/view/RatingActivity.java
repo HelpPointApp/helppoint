@@ -1,5 +1,7 @@
 package com.example.reubert.appcadeirantes.view;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,21 +12,32 @@ import android.widget.TextView;
 import com.example.reubert.appcadeirantes.R;
 import com.example.reubert.appcadeirantes.model.Help;
 import com.example.reubert.appcadeirantes.model.Rating;
+import com.example.reubert.appcadeirantes.wrappers.ProgressDialog;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 public class RatingActivity extends AppCompatActivity {
 
-    private TextView lblTitle;
-    private TextView lblSubtitle;
-    private Button btnRate;
-    private RatingBar rtbRatingBar;
+    public TextView lblTitle;
+    public TextView lblSubtitle;
+    public RatingBar rtbRatingBar;
+    public Button btnRate;
+    private ProgressDialog progressDialog;
+    private Help help;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rating);
 
+        progressDialog = ProgressDialog.getInstance();
+
         loadElementsFromXML();
         createClickListeners();
+        loadHelpDisplay();
     }
 
     public void loadElementsFromXML(){
@@ -34,6 +47,24 @@ public class RatingActivity extends AppCompatActivity {
         btnRate = (Button) findViewById(R.id.btnRate);
     }
 
+    private void loadHelpDisplay(){
+        help = Help.getActive();
+        help.fetchInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                ParseUser user = help.getHelperParseUser();
+
+                user.fetchIfNeededInBackground(new GetCallback<ParseUser>() {
+                    @Override
+                    public void done(ParseUser object, ParseException e) {
+                        lblTitle.setText("Como você avalia a ajuda do(a) " +object.getString("firstName") +" ?");
+                        lblSubtitle.setText("Sua avaliação é crucial para que "+object.getString("firstName") +" receba uma pontuação justa pela ajuda.");
+                    }
+                });
+            }
+        });
+    }
+
     public void createClickListeners(){
         btnRate.setOnClickListener(new RateButtonHandler());
     }
@@ -41,10 +72,19 @@ public class RatingActivity extends AppCompatActivity {
     public class RateButtonHandler implements View.OnClickListener {
         @Override
         public void onClick(View clickedView){
-            Rating rating = new Rating();
-            rating.setHelp(Help.getActive());
-            rating.setHelperUser(Help.getActive().getHelperParseUser());
-            rating.setStars(rtbRatingBar.getNumStars());
+
+            RatingBar rtbRatingBar = (RatingBar) findViewById(R.id.ratingStars);
+            progressDialog.create(clickedView.getContext(), "Avaliando", "aguarde estamos salvando sua avaliação");
+
+            help.rating((int)rtbRatingBar.getRating(), new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    progressDialog.hide();
+                    Intent data = new Intent();
+                    setResult(Activity.RESULT_OK, data);
+                    finish();
+                }
+            });
         }
     }
 }
