@@ -8,6 +8,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.reubert.appcadeirantes.R;
+import com.example.reubert.appcadeirantes.model.Help;
 import com.example.reubert.appcadeirantes.model.Rating;
 
 public class RatingActivity extends AppCompatActivity {
@@ -41,8 +42,8 @@ public class RatingActivity extends AppCompatActivity {
         @Override
         public void onClick(View clickedView){
             Rating rating = new Rating();
-            rating.setHelp(null); // Daqui a pouco pego esse help
-            rating.setHelperUser(null);
+            rating.setHelp(Help.getActive());
+            rating.setHelperUser(Help.getActive().getHelperParseUser());
             rating.setStars(rtbRatingBar.getNumStars());
         }
     }

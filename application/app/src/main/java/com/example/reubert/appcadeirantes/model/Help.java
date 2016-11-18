@@ -2,6 +2,7 @@ package com.example.reubert.appcadeirantes.model;
 
 import android.util.Log;
 
+import com.example.reubert.appcadeirantes.exception.ExistentHelpException;
 import com.example.reubert.appcadeirantes.exception.NotActiveHelpException;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -27,6 +28,16 @@ public class Help extends ParseObject {
         Helping,
         Finished,
         Canceled,
+    }
+
+    private static Help instance;
+
+    public static Help getActive(){
+        if(instance == null){
+            throw new NotActiveHelpException();
+        }
+
+        return instance;
     }
 
     public ParseUser getHelpedParseUser(){
@@ -126,21 +137,25 @@ public class Help extends ParseObject {
     }
 
     public static Help createHelp(ParseUser user,
-                                  int type,
-                                  String description,
-                                  double latitude,
-                                  double longitude,
-                                  SaveCallback saveCallback){
-        Help help = new Help();
-        help.setTypeHelp(TYPE.values()[type]);
-        help.setDescription(description);
-        help.setHelpedParseUser(user);
-        help.setStatus(STATUS.Requesting);
-        help.setLocation(latitude, longitude);
-        help.saveInBackground(saveCallback);
+        int type, String description, double latitude,
+        double longitude, SaveCallback saveCallback)
+    {
+        if(instance != null){
+            throw new ExistentHelpException();
+        }
+
+        instance = new Help();
+        instance.setTypeHelp(TYPE.values()[type]);
+        instance.setDescription(description);
+        instance.setHelpedParseUser(user);
+        instance.setStatus(STATUS.Requesting);
+        instance.setLocation(latitude, longitude);
+        instance.saveInBackground(saveCallback);
+
         user.put("status", User.STATUS.RequestingHelp.ordinal());
         user.saveInBackground();
-        return help;
+
+        return instance;
     }
 
     public static void getHelpByUserHelper(ParseUser user, FindCallback<Help> callback){

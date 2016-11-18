@@ -84,19 +84,13 @@ public class RequestHelpActivity extends AppCompatActivity {
         public void onClick(View view) {
             adviceAboutSendingRequest();
 
-            try {
-                Location userLocation = GPSManager.getInstance(getBaseContext()).getUserLocation();
-                int typeHelp = spinnerHelpTypes.getSelectedItemPosition();
+            Location userLocation = GPSManager.getInstance(getBaseContext()).getUserLocation();
+            int typeHelp = spinnerHelpTypes.getSelectedItemPosition();
 
-                creatingHelp = Help.createHelp(
-                        User.getCurrentUser(), typeHelp, edtObservation.getText().toString(),
-                        userLocation.getLatitude(), userLocation.getLongitude(), new SaveHelp()
-                );
-            } catch(UnknownLocationException e){
-                // @toDo: implement requestSingleUpdate method to force update, not so important for now
-                progressDialog.hide();
-                Toast.makeText(RequestHelpActivity.this, "Posição do GPS não encontrada", Toast.LENGTH_SHORT).show();
-            }
+            creatingHelp = Help.createHelp(
+                    User.getCurrentUser(), typeHelp, edtObservation.getText().toString(),
+                    userLocation.getLatitude(), userLocation.getLongitude(), new SaveHelp()
+            );
         }
     }
 

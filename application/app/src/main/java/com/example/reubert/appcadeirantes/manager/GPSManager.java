@@ -46,10 +46,6 @@ public class GPSManager {
         alertDialogBuilder.create().show();
     }
 
-    /**
-     * @ToDo: create a model LoggedUser and move this method to that
-     * @ToDo: following Clean Code, null should never be returned. We'll implement exceptions later.
-     */
     @SuppressWarnings("MissingPermission")
     public Location getUserLocation(){
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -60,7 +56,8 @@ public class GPSManager {
         }
 
         if(location == null){
-            throw new UnknownLocationException();
+            // @toDo: there is a better way than use NETWORK_PROVIDER
+            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         }
 
         return location;
@@ -71,5 +68,4 @@ public class GPSManager {
             context.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
         }
     }
-
 }
