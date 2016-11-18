@@ -44,6 +44,7 @@ public class RequestHelpActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy(){
+        super.onDestroy();
         progressDialog.hide(); // prevents the WindowLeaked problem
     }
 

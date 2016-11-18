@@ -80,7 +80,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Help.getHelpByUserHelper(this.user, new FindCallback<Help>() {
                     @Override
                     public void done(List<Help> objects, ParseException e) {
-
                         if(e == null){
                             if (objects.size() > 0){
                                 Help help = objects.get(0);
@@ -98,7 +97,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Help.getRequestHelpByUser(user, new FindCallback<Help>() {
                     @Override
                     public void done(List<Help> objects, ParseException e) {
-                        if (e != null){
+                        if (e == null){
                             if(objects.size() > 0){
                                 Help help = objects.get(0);
                                 helpRequesting = help;
