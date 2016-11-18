@@ -15,9 +15,10 @@ public class ProgressDialog {
     }
 
     public void create(Context context, CharSequence title, CharSequence message){
-        if(progressDialog == null){
-            progressDialog = new android.app.ProgressDialog(context);
-        }
+        // Correcao para WindowLeaked
+        //if(progressDialog == null){
+        progressDialog = new android.app.ProgressDialog(context);
+        //}
 
         progressDialog.setTitle(title);
         progressDialog.setMessage(message);
@@ -25,8 +26,9 @@ public class ProgressDialog {
     }
 
     public void hide(){
+        // Correcao para WindowLeaked
         if(progressDialog != null && progressDialog.isShowing()){
-            progressDialog.hide();
+            progressDialog.dismiss();
         }
     }
 }
