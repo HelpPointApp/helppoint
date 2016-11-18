@@ -31,6 +31,7 @@ public class HelpActivity extends AppCompatActivity {
     private TextView lblTitle;
     private TextView lblAddress;
     private TextView lblIntervalPoints;
+    private TextView btnHelp;
 
     private ProgressDialog progressDialog;
 
@@ -56,17 +57,20 @@ public class HelpActivity extends AppCompatActivity {
         lblTitle = (TextView) findViewById(R.id.lblTitle);
         lblAddress = (TextView) findViewById(R.id.lblAddress);
         lblIntervalPoints = (TextView) findViewById(R.id.lblIntervalPoints);
+        btnHelp = (TextView) findViewById(R.id.btnHelp);
     }
 
     private void loadGeneralValues(){
         currentHelp = Help.getByObjectId(getCurrentHelpObjectId());
         currentLoggedUser = User.getCurrentUser();
         ParseUser helpedUser = currentHelp.getHelpedParseUser();
+
         helpedUser.fetchIfNeededInBackground(new GetCallback<ParseUser>() {
             @Override
             public void done(ParseUser object, ParseException e) {
                 if(e == null){
                     lblPersonName.setText(object.getString("firstName"));
+                    btnHelp.setText("Ser herói do(a) " + object.getString("firstName"));
                 }
             }
         });
@@ -85,10 +89,9 @@ public class HelpActivity extends AppCompatActivity {
     }
 
     public void onChangeActions(){
-        final Button buttonHelp = (Button) findViewById(R.id.btnHelped);
 
         if (currentHelp.getHelperParseUser() == null) {
-            buttonHelp.setOnClickListener(new View.OnClickListener() {
+            btnHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     progressDialog.create(HelpActivity.this, "Ajuda", "Aguarde, o pedido está feito");
@@ -101,7 +104,7 @@ public class HelpActivity extends AppCompatActivity {
                             if (responseHelp != null) {
                                 currentHelp = responseHelp;
                                 startHandler();
-                                buttonHelp.setVisibility(View.INVISIBLE);
+                                btnHelp.setVisibility(View.INVISIBLE);
                             } else {
                                 finish();
                             }
@@ -111,8 +114,8 @@ public class HelpActivity extends AppCompatActivity {
             });
         }else{
             if(areUsersEqual(currentHelp.getHelpedParseUser(), currentLoggedUser)) {
-                buttonHelp.setText("Finalizar");
-                buttonHelp.setOnClickListener(new View.OnClickListener() {
+                btnHelp.setText("Finalizar");
+                btnHelp.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         stopHandler();
@@ -132,7 +135,7 @@ public class HelpActivity extends AppCompatActivity {
                 });
             }else{
                 startHandler();
-                buttonHelp.setVisibility(View.INVISIBLE);
+                btnHelp.setVisibility(View.INVISIBLE);
             }
         }
     }
