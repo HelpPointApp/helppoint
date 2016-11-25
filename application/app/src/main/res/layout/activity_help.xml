@@ -91,7 +91,7 @@
                             android:layout_centerVertical="true"/>
 
                         <TextView
-                            android:text="Av. Mem de Sá, 1527B - Santa Efigênia"
+                            android:text="Buscando endereço..."
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/lblAddress"

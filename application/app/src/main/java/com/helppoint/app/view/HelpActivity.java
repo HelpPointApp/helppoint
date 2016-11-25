@@ -2,6 +2,8 @@ package com.helppoint.app.view;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +24,10 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 public class HelpActivity extends AppCompatActivity {
 
     public static final String HELP_OBJECT_ID_KEY = "objectId";
@@ -32,8 +38,10 @@ public class HelpActivity extends AppCompatActivity {
     private TextView lblIntervalPoints;
     private TextView btnHelp;
 
-    private ProgressDialog progressDialog;
+    private String helpedUserName;
 
+    private ProgressDialog progressDialog;
+    private Geocoder geocoder;
     private Help currentHelp;
     private ParseUser currentLoggedUser;
     private HandleCheckStatusHelp handleCheckStatus;
@@ -52,17 +60,6 @@ public class HelpActivity extends AppCompatActivity {
         onChangeActions();
     }
 
-    private void startFetchAddressService(){
-        Location userLocation = new Location("TEMP_PROVIDER");
-        userLocation.setLatitude(-19.9523872);
-        userLocation.setLongitude(-43.9696899);
-
-        Intent intent = new Intent(this, AddressIntentService.class);
-        intent.putExtra(AddressIntentService.RECEIVER, new AddressIntentServiceReceiver(new Handler()));
-        intent.putExtra(AddressIntentService.LOCATION, userLocation);
-        startService(intent);
-    }
-
     private void loadElementsFromXML(){
         lblPersonName = (TextView) findViewById(R.id.lblPersonName);
         lblTitle = (TextView) findViewById(R.id.lblTitle);
@@ -75,13 +72,12 @@ public class HelpActivity extends AppCompatActivity {
         currentHelp = Help.getByObjectId(getCurrentHelpObjectId());
         currentLoggedUser = User.getCurrentUser();
         ParseUser helpedUser = currentHelp.getHelpedParseUser();
-
         helpedUser.fetchIfNeededInBackground(new GetCallback<ParseUser>() {
             @Override
             public void done(ParseUser object, ParseException e) {
                 if(e == null){
-                    lblPersonName.setText(object.getString("firstName"));
-                    btnHelp.setText("Ser herói do(a) " + object.getString("firstName"));
+                    helpedUserName = object.getString("firstName");
+                    updateLabelsBasedOnHelpedUser();
                 }
             }
         });
@@ -89,10 +85,39 @@ public class HelpActivity extends AppCompatActivity {
 
     private void loadAllServices(){
         progressDialog = ProgressDialog.getInstance();
+        geocoder = new Geocoder(this, Locale.getDefault());
     }
 
     private void updateLabelsBasedOnHelpedUser(){
-        ParseUser helpedUser = currentHelp.getHelpedParseUser();
+        lblPersonName.setText(helpedUserName);
+        lblTitle.setText("Oi herói! Você poderia ajudar o(a) " + helpedUserName + " a subir as escadas?");
+        btnHelp.setText("Ser herói do(a) " + helpedUserName);
+
+        try {
+            List<Address> addresses = geocoder.getFromLocation(-19.9523872, -43.9696899, 1);
+
+            if(addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                lblAddress.setText(returnedAddress.getAddressLine(0));
+            } else {
+                lblAddress.setText("Endereço não encontrado.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void startFetchAddressService(){
+        /*
+        Location userLocation = new Location("TEMP_PROVIDER");
+        userLocation.setLatitude(-19.9523872);
+        userLocation.setLongitude(-43.9696899);
+
+        Intent intent = new Intent(this, AddressIntentService.class);
+        intent.putExtra(AddressIntentService.RECEIVER, new AddressIntentServiceReceiver(new Handler()));
+        intent.putExtra(AddressIntentService.LOCATION, userLocation);
+        startService(intent);
+        */
     }
 
     private String getCurrentHelpObjectId(){
