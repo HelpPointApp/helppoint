@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.helppoint.app.appcadeirantes.R;
 import com.helppoint.app.manager.GPSManager;
 import com.helppoint.app.model.Help;
@@ -94,7 +96,9 @@ public class HelpActivity extends AppCompatActivity {
         btnHelp.setText("Ser herói do(a) " + helpedUserName);
 
         try {
-            List<Address> addresses = geocoder.getFromLocation(-19.9523872, -43.9696899, 1);
+            double latitude = (getIntent().getExtras().getDouble("helpLocationLatitude"));
+            double longitude = (getIntent().getExtras().getDouble("helpLocationLongitude"));
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
 
             if(addresses != null) {
                 Address returnedAddress = addresses.get(0);

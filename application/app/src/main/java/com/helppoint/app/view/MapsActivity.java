@@ -142,9 +142,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onMarkerClick(Marker marker) {
                 LatLng location = marker.getPosition();
                 Help help = getHelpByMarkerLocation(location.latitude, location.longitude);
-/*                if (!help.getHelpedParseUser().getObjectId().equals(user.getObjectId()))*/
-                startActivityHelp(help.getObjectId());
-//                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 17));
+                startActivityHelp(help.getObjectId(), location);
                 return true;
             }
         });
@@ -251,25 +249,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void requestNearUsers(double latitude, double longitude){
         User.getNearUsers(latitude, longitude, new FindCallback<ParseUser>() {
             @Override
-            public void done(List<ParseUser> objects, ParseException e) {
-                if (e == null){
-                    ParseUser user;
-                    ParseGeoPoint point;
-                    MarkerOptions markerOptions;
+            public void done(List<ParseUser> users, ParseException possibleException) {
+                if(possibleException != null){
+                    Log.d("Exception", "Couldn't get near users.");
+                    return;
+                }
 
-                    for (int i =0, len = objects.size(); i < len; i++){
-                        user = objects.get(i);
-                        point = (ParseGeoPoint) user.get("lastPosition");
-                        markerOptions = new MarkerOptions();
-                        markerOptions.position(new LatLng(point.getLatitude(), point.getLongitude()));
-                        googleMap.addMarker(markerOptions);
-                    }
+                ParseGeoPoint point;
+                MarkerOptions markerOptions;
+
+                for(ParseUser user: users){
+                    point = (ParseGeoPoint) user.get("lastPosition");
+                    markerOptions = (new MarkerOptions()).position(new LatLng(point.getLatitude(), point.getLongitude()));
+                    googleMap.addMarker(markerOptions);
                 }
             }
         });
     }
 
-    private void requestNearHelpers(double latitude, double longitude, int zoom){
+    private void requestNearHelpers(double latitude, final double longitude, int zoom){
         Help.getHelpOutOfCloseness(latitude, longitude, zoom, new FindCallback<Help>() {
             @Override
             public void done(List<Help> objects, ParseException e) {
@@ -281,6 +279,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         MarkerOptions marker = new MarkerOptions();
                         marker.position(new LatLng(point.getLatitude(), point.getLongitude()));
                         marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
+                        marker.snippet("" + point.getLatitude() + "," + point.getLongitude());
                         googleMap.addMarker(marker);
                     }
                 }
@@ -348,16 +347,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 @Override
                 public void onClick(View view) {
                     stopHandleRequestPosition();
-                    startActivityHelp(helpRequesting.getObjectId());
+                    startActivityHelp(helpRequesting.getObjectId(), null); // mudar isso porque eh pra aparecer outra tela
                 }
             });
         }
         this.status = status;
     }
 
-    private void startActivityHelp(String objectId){
+    private void startActivityHelp(String objectId, LatLng location){
         Intent helpActivity = new Intent(MapsActivity.this, HelpActivity.class);
         helpActivity.putExtra("objectId", objectId);
+        helpActivity.putExtra("helpLocationLatitude", location.latitude);
+        helpActivity.putExtra("helpLocationLongitude", location.longitude);
         startActivityForResult(helpActivity, 2);
     }
 
