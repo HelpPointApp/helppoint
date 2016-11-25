@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.reubert.appcadeirantes">
+    package="com.helppoint.app.appcadeirantes">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,6 +12,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        <service android:name=".FetchAddressIntentService" android:exported="false"/>
 
         <meta-data
             android:name="com.parse.APPLICATION_ID"
@@ -25,31 +27,31 @@
             android:name="com.parse.SERVER"
             android:value="@string/parse_server" />
 
-        <activity android:name=".view.LoginActivity">
+        <activity android:name="com.helppoint.app.view.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".view.RegisterActivity" />
+        <activity android:name="com.helppoint.app.view.RegisterActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".view.MapsActivity"
+            android:name="com.helppoint.app.view.MapsActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
-        <activity android:name=".view.ProfileActivity" />
+        <activity android:name="com.helppoint.app.view.ProfileActivity" />
 
         <activity
-            android:name=".view.HelpActivity"
+            android:name="com.helppoint.app.view.HelpActivity"
             android:label="@string/title_activity_help"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".view.RequestHelpActivity" />
-        <activity android:name=".view.RatingActivity"></activity>
+        <activity android:name="com.helppoint.app.view.RequestHelpActivity" />
+        <activity android:name="com.helppoint.app.view.RatingActivity"></activity>
     </application>
 
 </manifest>

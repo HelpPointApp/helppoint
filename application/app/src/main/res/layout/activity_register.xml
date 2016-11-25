@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.RegisterActivity">
+    tools:context="com.helppoint.app.view.RegisterActivity">
 
     <include
         android:id="@+id/toolbar"

@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        tools:context="com.example.reubert.appcadeirantes.view.MapsActivity"
+        tools:context="com.helppoint.app.view.MapsActivity"
         android:layout_alignParentBottom="true" />
 
     <Button
