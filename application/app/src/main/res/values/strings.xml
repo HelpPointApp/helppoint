@@ -13,8 +13,8 @@
     <string name="cancel">Cancelar</string>
     <string name="title_activity_maps">Map</string>
     <string name="create_an_account">Criar uma conta</string>
-    <string name="create_account">Criar conta</string>
-    <string name="not_registered_yet">Não é cadastrado ainda?</string>
+    <string name="create_account">Crie uma conta</string>
+    <string name="not_registered_yet">Não é cadastrado?</string>
     <string name="request_help">Pedir ajuda</string>
     <string name="type_an_observation">Digite uma observação (opcional)</string>
     <string name="help">Ajudar</string>

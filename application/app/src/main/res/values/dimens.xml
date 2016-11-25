@@ -17,5 +17,5 @@
     <dimen name="h3_text_size">16dp</dimen>
 
     <dimen name="header_text_size">20dp</dimen>
-    <dimen name="header_icon_size">20dp</dimen>
+    <dimen name="header_icon_size">19dp</dimen>
 </resources>

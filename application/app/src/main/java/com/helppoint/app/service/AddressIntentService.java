@@ -18,7 +18,6 @@ import java.util.Locale;
 
 public class AddressIntentService extends IntentService {
     public static final int SUCCESS_RESULT_CODE = 1;
-    public static final int FAILURE_RESULT_CODE = 0;
     public static final String RESULT = Constants.MAIN_PACKAGE + ".ADDRESS_SERVICE_RESULT";
     public static final String LOCATION = Constants.MAIN_PACKAGE + ".ADDRESS_SERVICE_LOCATION_EXTRA";
     public static final String RECEIVER = Constants.MAIN_PACKAGE + ".ADDRESS_SERVICE_RECEIVER";

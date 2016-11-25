@@ -17,7 +17,7 @@
         android:layout_marginBottom="30dp"
         android:id="@+id/btnLogin"
         android:background="@color/colorPrimary"
-        android:textColor="@color/lightText"
+        android:textColor="@color/loginText"
         android:layout_above="@+id/viewSignupFooter"/>
 
     <EditText
@@ -34,9 +34,9 @@
         android:layout_alignParentEnd="true"
         android:hint="Senha"
         android:textSize="@dimen/input_text_size"
-        android:textColor="@color/lightText"
-        android:textColorHint="@color/lightText"
-        android:backgroundTint="@color/lightText"/>
+        android:textColor="@color/loginText"
+        android:textColorHint="@color/loginText"
+        android:backgroundTint="@color/loginText"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -49,10 +49,11 @@
         android:layout_above="@+id/edtPassword"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textColor="@color/lightText"
-        android:textColorHint="@color/lightText"
+        android:textColor="@color/loginText"
+        android:textColorHint="@color/loginText"
         android:textSize="@dimen/input_text_size"
-        android:maxLines="1"/>
+        android:maxLines="1"
+        android:backgroundTint="@color/loginText"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -68,7 +69,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/lblNotRegisteredYet"
-            android:textColor="@color/lightText"
+            android:textColor="@color/loginText"
             android:textSize="15sp"
             android:layout_weight="1"/>
 
@@ -76,7 +77,6 @@
             android:text="@string/create_an_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:id="@+id/lblSignUp"
             android:textColor="@color/colorPrimary"
