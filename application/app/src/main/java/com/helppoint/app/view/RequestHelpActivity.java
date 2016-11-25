@@ -65,7 +65,7 @@ public class RequestHelpActivity extends AppCompatActivity {
 
 
     private void adviceAboutSendingRequest(){
-        progressDialog.create(this, "Só mais um pouco, herói", "Estamos enviando sua solicitação...");
+        progressDialog.create(this, "Só mais um pouquinho", "Estamos enviando sua solicitação...");
     }
 
 
